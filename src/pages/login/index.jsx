@@ -25,7 +25,12 @@ import React from 'react'
 
 const Login = () => {
 
-  const { register, reset, handleSubmit, watch } = useForm()
+  const { register, reset, handleSubmit, watch } = useForm({
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  })
 
   const watchField = watch(['email', 'password'])
 
