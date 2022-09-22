@@ -6,6 +6,10 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.6",
+<<<<<<< HEAD
+=======
+    "@reduxjs/toolkit": "^1.8.5",
+>>>>>>> 9fff1e72822db5370993404881ec85c9709ce96a
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,6 +17,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.36.0",
+<<<<<<< HEAD
+=======
+    "react-router-dom": "^6.4.1",
+>>>>>>> 9fff1e72822db5370993404881ec85c9709ce96a
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },

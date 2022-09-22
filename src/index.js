@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+<<<<<<< HEAD
+=======
+import './index.css'
+>>>>>>> 9fff1e72822db5370993404881ec85c9709ce96a
 import { ThemeProvider, createTheme } from '@mui/material';
 
 const theme = createTheme({
