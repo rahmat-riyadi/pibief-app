@@ -1,42 +1,19 @@
 import {
-  Box,
-  Button,
   Container,
   Grid,
-  InputBase,
   Stack,
-  Typography
+  Typography,
 } from '@mui/material'
 
-import {
-  baseInputStyle,
-  baseTextStyle,
-  forgotPasswordStyle,
-  boxStyle,
-  baseButtonStyle
-} from './style'
-
-import { useForm } from 'react-hook-form'
-
-// import image from '../assets/image/login.svg'
+import { ToastContainer } from 'react-toastify'
 import logo from '../../assets/image/logo.svg'
-import React from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
+// import image from '../assets/image/login.svg'
 
+const LoginPage = () => {
 
-const Login = () => {
-
-  const { register, reset, handleSubmit, watch } = useForm({
-    defaultValues: {
-      email: '',
-      password: ''
-    }
-  })
-
-  const watchField = watch(['email', 'password'])
-
-  const onSubmit = data => {
-    console.log(data)
-    reset({email: '', password: ''})
+  if(JSON.parse(localStorage.getItem('auth'))){
+    return <Navigate to='/' />
   }
 
   return (
@@ -46,39 +23,19 @@ const Login = () => {
           <Stack direction='column' alignItems='center' justifyContent='space-between' sx={{ py: '70px', boxSizing: 'border-box', height: '100%' }} >
             <img src={logo} alt="" width='150' />
             <Typography variant='body1' sx={{ fontWeight: '300', color: '#fff' }} >
-              Pharmacy Efficiency Distribution
+              Pharmacy Efficiency Distribution { (JSON.parse(localStorage.getItem('auth')) ? 'benar' : 'salah')}
             </Typography>
           </Stack>
           {/* <img src={image} alt="" style={{ width: '100%' }} /> */}
         </Grid>
         <Grid item md={6} sx={{ display: 'flex' }} >
-          <Box sx={boxStyle} >
-            <Typography variant='body1' sx={{ fontWeight: '500', fontSize: '18px' }} >Selamat Datang</Typography>
-            <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: '300', mt: 1 }} >Silahkan Masukan Email dan Password Anda</Typography>
-            <Typography variant='body1' sx={{ ...baseTextStyle, mt: 3 }} >Email</Typography>
-            <InputBase
-              sx={{ ...baseInputStyle }}
-              {...register('email')}
-            />
-            <Typography variant='body1' sx={{ ...baseTextStyle, mt: 2 }} >Password</Typography>
-            <InputBase
-              sx={{ ...baseInputStyle }}
-              {...register('password')}
-            />
-            <Button variant='text' sx={forgotPasswordStyle} >Lupa Password</Button>
-            <Button
-              variant='contained'
-              sx={{ ...baseButtonStyle, bgcolor: 'primary' }}
-              onClick={handleSubmit(onSubmit)}
-              disabled={ watchField[0] === '' ||  watchField[1] === '' }
-            >
-              Masuk
-            </Button>
-          </Box>
+          {/* <RenderIf pos={pos} /> */}
+          <Outlet/>
         </Grid>
       </Grid>
+      <ToastContainer/>
     </Container>
   )
 }
 
-export default Login
+export default LoginPage

@@ -20,11 +20,12 @@ export const forgotPasswordStyle = {
     fontSize: '12px',
     p: 0,
     alignSelf: 'flex-end',
-    mt: 1
+    mt: 1,
+    color: 'secondary.main'
 } 
 
 export const boxStyle = {
-    boxShadow: '0px 0px 16px 0px #4787F31A', 
+    // boxShadow: '0px 0px 16px 0px #4787F31A', 
     width: '70%', 
     m: 'auto',
     borderRadius: '20px',
@@ -33,12 +34,12 @@ export const boxStyle = {
     py: 5,
     px: 5,
     boxSizing: 'border-box',
-    alignItems: 'center'
+    alignItems: 'flex-start',
 }
 
 export const baseButtonStyle = {
     textTransform: 'capitalize',
     width: '100%',
-    mt: 5,
+    mt: 2,
     boxShadow: 'none'
 }
