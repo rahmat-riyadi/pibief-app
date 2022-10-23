@@ -10,12 +10,8 @@ import {
   Table,
   TableBody,
 } from "@mui/material";
-import { useState } from "react";
-import BreadCrumbsNav from "../../components/BreadCrumbs";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import NotifDialog from "../../components/NotifDialog";
-import { useDispatch } from "react-redux";
-import { changeStatus } from "../../reducer/notifDialogSlice";
 
 const tableHeadStyle = {
   border: "none",
@@ -37,10 +33,10 @@ const TableStatus = ({ status }) => {
         width: "fit-content",
         p: "6px 8px",
         bgcolor:
-          status === "Lunas"
+          status === "Selesai"
             ? "rgba(80, 205, 137, 0.2)"
             : "rgba(249, 161, 27, 0.2)",
-        color: status === "Lunas" ? "#50CD89" : "#F9A11B",
+        color: status === "Selesai" ? "#50CD89" : "#F9A11B",
         borderRadius: "3px",
       }}
     >
@@ -51,52 +47,47 @@ const TableStatus = ({ status }) => {
   );
 };
 
-const Tagihan = () => {
-
-	const dispatch = useDispatch()
+const KarywanEntity = () => {
   const navigate = useNavigate();
 
   let tableData = [
     {
-      num: "P-01",
       name: "Rahmat Riyadi Syam",
-      comp: "PT. Khinta Permai",
-      order_date: "21-10-2022",
-      status: "Lunas",
-      total: "Rp. 962.620",
-      sisa: "Rp. 0",
-    },
-    {
-      num: "P-01",
-      name: "Nurhikma",
-      comp: "PT. Khinta Permai",
-      order_date: "21-10-2022",
-      status: "Belum dibayar",
-      total: "Rp. 962.620",
-      sisa: "Rp. 1.000.000",
+      email: "PT. Khinta Permai",
+      address: "Jl Persatuan Raya Mannanti",
+      phone: "09876123",
     },
   ];
 
-  for (let i = 0; i < 5; i++) {
-    tableData.push(tableData[i % 2]);
-  }
-
   return (
     <Box>
-      <BreadCrumbsNav />
-      <Typography
-        variant="h5"
-        sx={{ my: "20px", fontSize: 21, fontWeight: 600 }}
-      >
-        Tagihan
+      <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
+        Karyawan
       </Typography>
-      <Typography
-        variant="body1"
-        sx={{ fontWeight: "300", fontSize: 12, mb: 2 }}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 2 }}
       >
-        Tampilkan 10 Pesanan
-      </Typography>
-      <TableContainer sx={{}}>
+        <Typography variant="body1" sx={{ fontWeight: "300", fontSize: 12 }}>
+          Tampilkan 10 Karyawan
+        </Typography>
+        <Button
+          variant="contained"
+          disableElevation
+          color="secondary"
+          sx={{
+            width: "fit-content",
+            color: "#fff",
+            textTransform: "capitalize",
+          }}
+          onClick={() => navigate("/pembelian/pesanan/tambah")}
+        >
+          Tambah Karyawan
+        </Button>
+      </Stack>
+      <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -104,43 +95,31 @@ const Tagihan = () => {
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "20px", pl: 2 }}
               >
-                No.Order
+                No
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "150px" }}
               >
-                Vendor
+                Nama
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "100px" }}
               >
-                Tanggal Pesan
+                Email
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "150px" }}
               >
-                Tanggal Jatuh Tempo
+                Alamat
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "100px" }}
               >
-                Status
-              </TableCell>
-              <TableCell
-                padding="none"
-                sx={{ ...tableHeadStyle, width: "100px" }}
-              >
-                Sisa Tagihan
-              </TableCell>
-              <TableCell
-                padding="none"
-                sx={{ ...tableHeadStyle, width: "100px" }}
-              >
-                Total
+                Telepon
               </TableCell>
               <TableCell
                 padding="none"
@@ -152,12 +131,12 @@ const Tagihan = () => {
           </TableHead>
           <TableBody>
             {tableData.map((e, i) => (
-              <TableRow hover>
+              <TableRow id={i} hover>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, pl: 2, color: "#121215" }}
                 >
-                  {e.num}
+                  {i+1}
                 </TableCell>
                 <TableCell
                   padding="none"
@@ -170,39 +149,25 @@ const Tagihan = () => {
                   }}
                 >
                   {e.name}
-                  <Typography color="greyFont.main" sx={{ fontSize: "12px" }}>
-                    {e.comp}
-                  </Typography>
+                <Typography/>
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.order_date}
+                  {e.email}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.order_date}
+                  {e.address}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  <TableStatus status={e.status} />
-                </TableCell>
-                <TableCell
-                  padding="none"
-                  sx={{ ...tableDataStyle, color: "#121215" }}
-                >
-                  {e.sisa}
-                </TableCell>
-                <TableCell
-                  padding="none"
-                  sx={{ ...tableDataStyle, color: "#121215" }}
-                >
-                  {e.total}
+                  {e.phone}
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
                   <Stack direction="row" justifyContent="space-between">
@@ -210,12 +175,12 @@ const Tagihan = () => {
                       color="greyFont"
                       variant="outlined"
                       size="small"
-                      style={{
-                        p: "8px",
+                      sx={{
                         textTransform: "capitalize",
                         fontSize: "12px",
+                        p: "4px 8px",
                       }}
-                      onClick={() => navigate("/pembelian/tagihan/detail/:id")}
+                      onClick={() => navigate(`/pembelian/pesanan/detail/${i}`)}
                     >
                       Lihat
                     </Button>
@@ -223,12 +188,11 @@ const Tagihan = () => {
                       color="greyFont"
                       variant="outlined"
                       size="small"
-                      style={{
-                        p: "8px",
+                      sx={{
                         textTransform: "capitalize",
                         fontSize: "12px",
+                        p: "4px 8px",
                       }}
-											onClick={() => dispatch(changeStatus(true))}
                     >
                       Hapus
                     </Button>
@@ -239,12 +203,8 @@ const Tagihan = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <NotifDialog 
-				message="Apakah anda ingin menghapus data?"
-				status={false} 
-			/>
     </Box>
   );
 };
 
-export default Tagihan;
+export default KarywanEntity;

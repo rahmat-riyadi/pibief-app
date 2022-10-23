@@ -1,7 +1,8 @@
-import { DashboardRounded, DiscountOutlined, ExpandMore, FileUploadOutlined, Inventory2Rounded, KeyboardArrowRightOutlined, LeaderboardOutlined, ShoppingCart } from '@mui/icons-material'
+import { DashboardRounded, DiscountOutlined, ExpandMore, FileUploadOutlined, Inventory2Rounded, KeyboardArrowRightOutlined, LeaderboardOutlined, OpenInFull, ShoppingCart } from '@mui/icons-material'
 import {
   Box,
   Collapse,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -74,8 +75,10 @@ const Sidebar = () => {
 
   const [showPembelian, setShowPembelian] = useState(false)
   const [showPenjualan, setShowPenjualan] = useState(false)
+  const [showEntity, setShowEntity] = useState(false)
   const [showStok, setShowStok] = useState(false)
   const [showExport, setShowExport] = useState(false)
+  const [expand, setExpand] = useState(false)
 
   const dispatch = useDispatch()
   const { currentIndex, location } = useSelector( state => state.sidebarReducer )
@@ -86,11 +89,27 @@ const Sidebar = () => {
 
   return (
     <Box sx={{
-      width: '300px',
+      width: !expand ? '300px' : '100px',
       height: '100%',
       boxShadow: '1px 1px 12px rgba(0, 0, 0, 0.05)',
-      mr: 1
+      transition: '1s easy',
+      position: 'relative',
+      overflowY: 'auto'
     }} >
+      <IconButton
+        onClick={() => setExpand(!expand)} 
+        sx={{
+          bgcolor: '#fff' ,
+          position: 'absolute', 
+          // transform: 'translateY(-50%)',
+          right: '-10px',
+          bottom: '50%',
+          zIndex: '1',
+          boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+        }} 
+      >
+        <OpenInFull sx={{ fontSize: '12px' }} />
+      </IconButton>
       <Stack direction='column' alignItems='center' sx={{ boxSizing: 'border-box', py: 3, px: 2 }} >
         <img src={logo} alt="logo" width='130' />
         <List sx={{ width: '100%', mt: 3 }} >
@@ -146,25 +165,40 @@ const Sidebar = () => {
           <Collapse in={showPenjualan} sx={{ pl: 6 }} >
             <List>
               <ListButton 
-                itemText={ <ItemText label='Pesanan Online' status={ isSelected('pesanan online', 2) } /> } 
-                icon={<Inventory2Rounded sx={{ color: (isSelected('pesanan online', 2) === 'selected') ? '#fff' : '' }}  />} 
-                status={ isSelected('pesanan online', 2) }
+                itemText={ <ItemText label='Laporan' status={ isSelected('laporan', 2) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('laporan', 2) === 'selected') ? '#fff' : '' }}  />} 
+                status={ isSelected('Laporan', 2) }
                 onClick={ () => {
-                  dispatch(onButtonClick({ location: 'pesanan online', index: 2 }))
-
+                  dispatch(onButtonClick({ location: 'Laporan', index: 2 }))
+                  navigate('/penjualan/laporan')
                 }}
               />
               <ListButton 
-                itemText={ <ItemText label='Pesanan Offline' status={ isSelected('pesanan offline', 2) } /> } 
-                icon={<Inventory2Rounded sx={{ color: (isSelected('pesanan offline', 2) === 'selected') ? '#fff' : '' }}  />} 
-                status={ isSelected('pesanan offline', 2) }
-                onClick={ () => dispatch(onButtonClick({ location: 'pesanan offline', index: 2 })) }
+                itemText={ <ItemText label='Pesanan' status={ isSelected('pesanan', 2) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('pesanan', 2) === 'selected') ? '#fff' : '' }}  />} 
+                status={ isSelected('pesanan', 2) }
+                onClick={ () => {
+                  dispatch(onButtonClick({ location: 'pesanan', index: 2 })) 
+                  navigate('/penjualan/pesanan')
+                }}
               />
               <ListButton 
-                itemText={ <ItemText label='History Pesanan' status={ isSelected('history pesanan', 2) } /> } 
-                icon={<Inventory2Rounded  sx={{ color: (isSelected('history pesanan', 2) === 'selected') ? '#fff' : '' }} />} 
-                status={ isSelected('history pesanan', 2) }
-                onClick={ () => dispatch(onButtonClick({ location: 'history pesanan', index: 2 })) }
+                itemText={ <ItemText label='Tagihan' status={ isSelected('tagihan', 2) } /> } 
+                icon={<Inventory2Rounded  sx={{ color: (isSelected('tagihan', 2) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('tagihan', 2) }
+                onClick={ () => dispatch(onButtonClick({ location: 'tagihan', index: 2 })) }
+              />
+              <ListButton 
+                itemText={ <ItemText label='Pengiriman' status={ isSelected('pengiriman', 2) } /> } 
+                icon={<Inventory2Rounded  sx={{ color: (isSelected('pengiriman', 2) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('pengiriman', 2) }
+                onClick={ () => dispatch(onButtonClick({ location: 'pengiriman', index: 2 })) }
+              />
+              <ListButton 
+                itemText={ <ItemText label='Penawaran' status={ isSelected('penawaran', 2) } /> } 
+                icon={<Inventory2Rounded  sx={{ color: (isSelected('penawaran', 2) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('penawaran', 2) }
+                onClick={ () => dispatch(onButtonClick({ location: 'penawaran', index: 2 })) }
               />
             </List>
           </Collapse>
@@ -209,6 +243,46 @@ const Sidebar = () => {
                 icon={<Inventory2Rounded sx={{ color: (isSelected('alat kesehatan', 4) === 'selected') ? '#fff' : '' }} />} 
                 status={ isSelected('alat kesehatan', 4) }
                 onClick={ () => dispatch(onButtonClick({ location: 'alat kesehatan', index: 4 })) }
+              />
+            </List>
+          </Collapse>
+          <ListButtonExpand 
+            itemText={ <ItemText label='Entity' /> } 
+            icon={<FileUploadOutlined/>}
+            status={showEntity}
+            onClick={() => setShowEntity(!showEntity)}
+          />
+          <Collapse in={showEntity} sx={{ pl: 6 }} >
+            <List>
+              <ListButton 
+                itemText={ <ItemText label='Karyawan' status={ isSelected('karyawan', 5) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('karyawan', 5) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('karyawan', 5) }
+                onClick={ () => {
+                  dispatch(onButtonClick({ location: 'karyawan', index: 5 })) 
+                  navigate('entity/karyawan')
+                }}
+              />
+              <ListButton 
+                itemText={ <ItemText label='Cabang' status={ isSelected('cabang', 5) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('cabang', 5) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('cabang', 5) }
+                onClick={ () => {
+                  dispatch(onButtonClick({ location: 'cabang', index: 5 })) 
+                  navigate('entity/cabang')
+                }}
+              />
+              <ListButton 
+                itemText={ <ItemText label='Vendor' status={ isSelected('vendor', 5) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('vendor', 5) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('vendor', 5) }
+                onClick={ () => dispatch(onButtonClick({ location: 'vendor', index: 5 })) }
+              />
+              <ListButton 
+                itemText={ <ItemText label='Pelanggan' status={ isSelected('pelanggan', 5) } /> } 
+                icon={<Inventory2Rounded sx={{ color: (isSelected('pelanggan', 5) === 'selected') ? '#fff' : '' }} />} 
+                status={ isSelected('pelanggan', 5) }
+                onClick={ () => dispatch(onButtonClick({ location: 'pelanggan', index: 5 })) }
               />
             </List>
           </Collapse>

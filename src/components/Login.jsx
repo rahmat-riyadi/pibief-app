@@ -12,7 +12,6 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { toast } from 'react-toastify'
 
 export const baseInputStyle = {
 	width: '100%',
@@ -98,9 +97,6 @@ const Login = () => {
 				setError('password',{ types: 'incorrect', message: 'Password anda salah!' })
 			}
 
-      toast.error('login gagal', {
-        position: 'top-center',
-      })
     })
   }
 

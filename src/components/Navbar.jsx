@@ -22,6 +22,7 @@ const Navbar = () => {
 				alignItems: 'center', 
 				borderBottom: '1px solid #EAEAEA', 
 				position: 'sticky ',
+        boxShadow: 'inset 1px -1px 12px rgba(0, 0, 0, 0.05)',
 			}} 
 		>
         <IconButton onClick={() => navigate(-1)} >

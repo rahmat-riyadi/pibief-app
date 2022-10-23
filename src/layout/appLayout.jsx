@@ -13,7 +13,7 @@ const AppLayout = () => {
   return (
     <Container maxWidth={false} sx={{ height: '100vh', display: 'flex', p: '0 !important' }} >
         <Sidebar/>
-        <Stack sx={{ flex: 1, bgcolor: '#fff', overflowY: 'auto', position: 'relative', }} >
+        <Stack sx={{ flex: 1, bgcolor: '#fff', overflowY: 'auto', position: 'relative', boxShadow: 'inset 1px -1px 12px rgba(0, 0, 0, 0.05)', }} >
           <Navbar/>
           <Box sx={{ flex: 1, m: 4}} >
             <Outlet/>

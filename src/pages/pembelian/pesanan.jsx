@@ -82,7 +82,13 @@ const Pesanan = () => {
 				<Typography variant='body1' sx={{ fontWeight: '300', fontSize: 12 }} >
 					Tampilkan 10 Pesanan
 				</Typography>
-				<Button variant='contained' disableElevation color='secondary' sx={{ width: 'fit-content', color: '#fff', textTransform: 'capitalize' }} >
+				<Button 
+					variant='contained' 
+					disableElevation 
+					color='secondary' 
+					sx={{ width: 'fit-content', color: '#fff', textTransform: 'capitalize' }}
+					onClick={ () => navigate('/pembelian/pesanan/tambah') }
+				>
 					Tambah Pesanan
 				</Button>
 			</Stack>

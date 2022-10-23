@@ -25,6 +25,9 @@ const theme = createTheme({
     },
     greyFont: {
       main: '#656A7B'
+    },
+    white: {
+      main: '#fff'
     }
   }
 })
