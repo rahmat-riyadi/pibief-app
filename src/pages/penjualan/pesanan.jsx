@@ -15,6 +15,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeStatus } from "../../reducer/notifDialogSlice";
+import NotifDialog from "../../components/NotifDialog";
 
 const tableHeadStyle = {
   border: "none",
@@ -30,9 +33,16 @@ const tableDataStyle = {
 };
 
 const PesananPenjualan = () => {
+
   const [tabValue, setTabValue] = useState(0);
+  const [dialogOpt, setDialogOpt] = useState({
+    message: "Apakah anda ingin Menolak data?",
+    status: false,
+    onAcceptText: "Ya, hapus"
+  })
 
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   let tableData = [
     {
@@ -55,6 +65,43 @@ const PesananPenjualan = () => {
 
   for (let i = 0; i < 5; i++) {
     tableData.push(tableData[i % 2]);
+  }
+
+  const handleRightButtonClick = (status) => {
+
+    if(status !== "Menunggu"){
+      setDialogOpt({
+        message: "Apakah anda ingin menghapus data?",
+        status: false,
+        onAcceptText: "Ya, hapus"
+      })
+      dispatch(changeStatus(true))
+    } else {
+      setDialogOpt({
+        message: "Apakah anda ingin menolak data?",
+        status: false,
+        onAcceptText: "Ya, tolak"
+      })
+      dispatch(changeStatus(true))
+    }
+
+  }
+
+  const handleLeftButtonClick = (status, i) => {
+
+    if(status !== "Menunggu"){
+      navigate(`detail/${i}`)
+    } else {
+      setDialogOpt({
+        message: 'Data Anda Telah Diverifikasi',
+        status: true,
+        onAcceptText: ""
+      })
+      dispatch(changeStatus(true))
+
+      setTimeout(() => dispatch(changeStatus(false)), 1500)
+    }
+
   }
 
   return (
@@ -248,7 +295,7 @@ const PesananPenjualan = () => {
                             ? "secondary.main"
                             : "transparent",
                       }}
-                      onClick={() => navigate(`detail/${i}`)}
+                      onClick={() => handleLeftButtonClick(e.status, i)}
                     >
                       {e.status === "Menunggu" ? "Verifikasi" : "Lihat"}
                     </Button>
@@ -267,6 +314,7 @@ const PesananPenjualan = () => {
                         bgcolor:
                           e.status === "Menunggu" ? "#C92B28" : "transparent",
                       }}
+                      onClick={() => handleRightButtonClick(e.status)}
                     >
                       {e.status === "Menunggu" ? "Tolak" : "Hapus"}
                     </Button>
@@ -277,6 +325,11 @@ const PesananPenjualan = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <NotifDialog 
+				message={dialogOpt.message}
+				status={dialogOpt.status}
+        onAcceptText={dialogOpt.onAcceptText}
+			/>
     </Box>
   );
 };

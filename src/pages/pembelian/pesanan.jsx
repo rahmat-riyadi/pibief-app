@@ -13,6 +13,9 @@ import {
 import React from 'react'
 import BreadCrumbsNav from '../../components/BreadCrumbs'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { changeStatus } from "../../reducer/notifDialogSlice";
+import NotifDialog from '../../components/NotifDialog'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -48,6 +51,7 @@ const TableStatus = ({ status }) =>{
 const Pesanan = () => {
 
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	let tableData = [
 		{
@@ -148,7 +152,13 @@ const Pesanan = () => {
 										<Button color='greyFont' variant='outlined' size='small' sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }} onClick={() => navigate(`/pembelian/pesanan/detail/${i}`)}   >
 											Lihat
 										</Button>
-										<Button color='greyFont' variant='outlined' size='small' sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }}   >
+										<Button 
+											color='greyFont' 
+											variant='outlined' 
+											size='small' 
+											sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }}   
+											onClick={() => dispatch(changeStatus(true))}
+										>
 											Hapus
 										</Button>
 									</Stack>
@@ -158,6 +168,11 @@ const Pesanan = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<NotifDialog
+				message="Apakah anda ingin menghapus data?"
+				status={false}
+				onAcceptText="Ya, hapus"
+			/>
     </Box>
   )
 }

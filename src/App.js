@@ -6,6 +6,8 @@ import AppLayout from "./layout/appLayout";
 import IndexEntity from "./pages/entity";
 import CabangEntity from "./pages/entity/cabang";
 import KarywanEntity from "./pages/entity/karyawan";
+import TambahKaryawan from "./pages/entity/tambahKaryawan";
+import VendorEntity from "./pages/entity/vendor";
 import Index from "./pages/home";
 import LoginPage from "./pages/login";
 import DetailPesanan from "./pages/pembelian/detailPesanan";
@@ -16,8 +18,10 @@ import Tagihan from "./pages/pembelian/tagihan";
 import TambahPesanan from "./pages/pembelian/tambahPesanan";
 import IndexPembelian from "./pages/penjualan";
 import DetailPesananPenjualan from "./pages/penjualan/detailPesanan";
+import DetailTagihanPenjualan from "./pages/penjualan/detailTagihan";
 import LaporanPenjualan from "./pages/penjualan/laporan";
 import PesananPenjualan from "./pages/penjualan/pesanan";
+import TagihanPenjualan from "./pages/penjualan/tagihan";
 import TambahPesananPenjualan from "./pages/penjualan/tambahPesanan";
 import ProtectedRoute from "./utils/ProtectedRoute";
 
@@ -47,10 +51,14 @@ function App() {
               <Route path="pesanan" element={<PesananPenjualan/>} />
               <Route path="pesanan/tambah" element={<TambahPesananPenjualan/>} />
               <Route path='pesanan/detail/:id' element={<DetailPesananPenjualan/>}  />
+              <Route path='tagihan' element={<TagihanPenjualan/>} />
+              <Route path='tagihan/detail/:id' element={<DetailTagihanPenjualan/>} />
             </Route>
             <Route path='entity' element={<IndexEntity/>} >
               <Route path='karyawan' element={<KarywanEntity/>} />
+              <Route path='karyawan/tambah' element={<TambahKaryawan/>} />
               <Route path='cabang' element={<CabangEntity/>} />
+              <Route path='vendor' element={<VendorEntity/>} />
             </Route>
         </Route>
       </Routes>

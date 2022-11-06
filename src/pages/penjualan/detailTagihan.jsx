@@ -2,6 +2,7 @@ import { PictureAsPdf } from '@mui/icons-material'
 import { 
   Box,
   Button,
+  Grid,
   Stack,
   Table,
   TableBody,
@@ -10,13 +11,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Grid,
   Divider
 } from '@mui/material'
 import React from 'react'
-import NotifDialog from '../../components/NotifDialog'
-import { useDispatch } from 'react-redux'
-import { changeStatus } from '../../reducer/notifDialogSlice'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -148,9 +145,8 @@ const SecondRow = () => {
   )
 }
 
-const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
+const DetailTagihanPenjualan = ({status  = 'Selesai'}) => {
 
-  const dispatch = useDispatch()
 
   let tableData = [
 		{
@@ -173,92 +169,93 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
 		}
 	]
 
-  const handleClick = () => {
-
-    dispatch(changeStatus(true))
-
-    setTimeout(() => {
-      dispatch(changeStatus(false))
-    }, 2000)
-
-  }
-
   return (
-    <div>
-      <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
-        Detail Pesanan
-      </Typography>
-      <Box sx={{ border: "1px solid #EAEAEA" }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ borderBottom: "1px solid #EAEAEA" }}
-        >
-          <Box
-            sx={{
-              width: "fit-content",
-              p: "6px 8px",
-              bgcolor:
-                status === "Selesai"
-                  ? "rgba(80, 205, 137, 0.2)"
-                  : "rgba(249, 161, 27, 0.2)",
-              color: status === "Selesai" ? "#50CD89" : "#F9A11B",
-              borderRadius: "3px",
+    <Box>
+      <Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
+				Detail Tagihan
+			</Typography>
+      <Box sx={{ border: '1px solid #EAEAEA' }} >
+        <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #EAEAEA' }} >
+          <Box 
+            sx={{ 
+              width: 'fit-content', 
+              p: '6px 8px', 
+              bgcolor: status === 'Selesai' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
+              color: status === 'Selesai' ? '#50CD89' : '#F9A11B',
+              borderRadius: '3px',
               my: 2.5,
-              ml: 2.5,
-            }}
-          >
-            <Typography variant="body1" sx={{ fontSize: "12px" }}>
+              ml: 2.5
+            }} 
+        >
+            <Typography variant='body1' sx={{ fontSize: '12px' }} >
               {status}
             </Typography>
           </Box>
-          <Button
-            variant="contained"
+          <Button 
+            variant='contained' 
             disableElevation
-            color="secondary"
-            startIcon={<PictureAsPdf />}
-            sx={{
-              textTransform: "capitalize",
-              color: "#FFF",
-              my: 2.5,
-              mr: 2.5,
-            }}
+            color='secondary'
+            startIcon={ <PictureAsPdf/> } 
+            sx={{ textTransform: 'capitalize', color: '#FFF', my: 2.5, mr: 2.5 }} 
           >
-            Cetak SP
+            Cetak
           </Button>
-        </Stack>
-        <Box sx={{ p: 2.5 }}>
-          <FirstRow />
-          <SecondRow />
-          <ThirdRow />
-          <TableContainer sx={{ mt: 3 }}>
+        </Stack> 
+        <Box sx={{ p: 2.5 }} >
+          <FirstRow/>
+          <SecondRow/>
+          <ThirdRow/>
+          <TableContainer sx={{ mt: 3 }} >
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ ...tableHeadStyle }}>Produk</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Kuantitas</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Satuan</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Diskon</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Harga</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Pajak</TableCell>
-                  <TableCell sx={{ ...tableHeadStyle }}>Total</TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Produk
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Kuantitas
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Satuan
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Diskon
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Harga
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Pajak
+                  </TableCell>
+                  <TableCell sx={{ ...tableHeadStyle }} >
+                    Total
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tableData.map((e, i) => (
+                {tableData.map((e,i) => (
                   <TableRow>
-                    <TableCell sx={{ ...tableDataStyle }}>{e.produk}</TableCell>
-                    <TableCell sx={{ ...tableDataStyle, width: "50px" }}>
+                    <TableCell sx={{ ...tableDataStyle }} >
+                      {e.produk}
+                    </TableCell>
+                    <TableCell sx={{ ...tableDataStyle, width: '50px' }} >
                       {e.kuantitas}
                     </TableCell>
-                    <TableCell sx={{ ...tableDataStyle }}>{e.satuan}</TableCell>
-                    <TableCell sx={{ ...tableDataStyle, width: "50px" }}>
+                    <TableCell sx={{ ...tableDataStyle }} >
+                      {e.satuan}
+                    </TableCell>
+                    <TableCell sx={{ ...tableDataStyle, width: '50px' }} >
                       {e.diskon}
                     </TableCell>
-                    <TableCell sx={{ ...tableDataStyle }}>{e.harga}</TableCell>
-                    <TableCell sx={{ ...tableDataStyle }}>{e.pajak}</TableCell>
-                    <TableCell sx={{ ...tableDataStyle }}>{e.total}</TableCell>
+                    <TableCell sx={{ ...tableDataStyle }} >
+                      {e.harga}
+                    </TableCell>
+                    <TableCell sx={{ ...tableDataStyle }} >
+                      {e.pajak}
+                    </TableCell>
+                    <TableCell sx={{ ...tableDataStyle }} >
+                      {e.total}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -279,6 +276,30 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
                 }}
               >
                 Rp. 350.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
+            >
+              PPN
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 72.000
               </Typography>
             </Typography>
             <Divider
@@ -313,27 +334,27 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
                 my: 2,
               }}
             />
-            <Box sx={{ minWidth: "400px", width: "250px" }}>
-              <Button
-                disableElevation
-                fullWidth
-                variant="contained"
-                color="secondary"
-                sx={{ textTransform: "capitalize", color: "#FFF" }}
-                onClick={handleClick}
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "18px", fontWeight: 600, pr: 2 }}
+            >
+              Sisa Tagihan
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
               >
-                Verifikasi
-              </Button>
-            </Box>
+                Rp. 0
+              </Typography>
+            </Typography>
           </Stack>
         </Box>
       </Box>
-      <NotifDialog
-        message='Data Anda Telah Diverifikasi'
-        status={true}
-      />
-    </div>
-  );
+    </Box>
+  )
 }
 
-export default DetailPesananPenjualan
+export default DetailTagihanPenjualan

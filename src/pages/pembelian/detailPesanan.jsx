@@ -10,10 +10,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Divider,
 } from '@mui/material'
 import React from 'react'
 import BreadCrumbsNav from '../../components/BreadCrumbs'
+import NotifDialog from '../../components/NotifDialog'
+import { useDispatch } from 'react-redux'
+import { changeStatus } from '../../reducer/notifDialogSlice'
+import DetailVendorDialog from '../../components/DetailVendorDialog'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -145,7 +150,20 @@ const SecondRow = () => {
   )
 }
 
+const VendorDialogText = ({ title, text }) => {
+  return(
+    <Typography variant='body1' sx={{ fontWeight: '500', color: 'greyFont.main', mb: 1 }} >
+      {title}
+      <Typography variant='body1' sx={{ display: 'inline', fontWeight: '300' }} >
+        {text}
+      </Typography>
+    </Typography>
+  )
+}
+
 const DetailPesanan = ({status  = 'Selesai'}) => {
+
+  const dispatch = useDispatch()
 
   let tableData = [
 		{
@@ -167,6 +185,16 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
       total: 'Rp. 300.000',
 		}
 	]
+
+  const handleClick = () => {
+
+    dispatch(changeStatus(true))
+
+    setTimeout(() => {
+      dispatch(changeStatus(false))
+    }, 2000)
+
+  }
 
   return (
     <Box>
@@ -258,31 +286,85 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
                     </TableCell>
                   </TableRow>
                 ))}
-                <TableRow sx={{ position: 'relative' }} >
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600 }} >
-                      SubTotal 
-                      <Typography sx={{ fontSize: '14px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 350.000
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>  
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '16px', fontWeight: 600 }} >
-                      Total 
-                      <Typography sx={{ fontSize: '16px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 650.000
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
+          <Stack alignItems="flex-end" direction="column" sx={{ mt: 2 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
+            >
+              SubTotal
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 350.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "16px", fontWeight: 600, pr: 2 }}
+            >
+              Total
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 650.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Box sx={{ minWidth: "400px", width: "250px" }}>
+              <Button
+                disableElevation
+                fullWidth
+                variant="contained"
+                color="secondary"
+                sx={{ textTransform: "capitalize", color: "#FFF" }}
+                onClick={handleClick}
+              >
+                Verifikasi
+              </Button>
+            </Box>
+          </Stack>
         </Box>
       </Box>
+      <NotifDialog
+        message='Data Anda Telah Diverifikasi'
+        status={true}
+      />
+      <DetailVendorDialog>
+        <VendorDialogText title="Penanggung Jawab " text=": Nurhikma " />
+        <VendorDialogText title="Perusahaan " text=": PT. Khinta " />
+        <VendorDialogText title="Alamat " text=": Jl Mannanti " />
+        <VendorDialogText title="NPWP " text=": 1234 5678 9111" />
+        <VendorDialogText title="Telepon " text=": 087819582058" />
+        <VendorDialogText title="Email " text=": ptkhinta@gmail.com" />
+      </DetailVendorDialog>
     </Box>
   )
 }

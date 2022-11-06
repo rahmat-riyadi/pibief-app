@@ -10,7 +10,6 @@ import {
   Table,
   TableBody,
 } from "@mui/material";
-import { useState } from "react";
 import BreadCrumbsNav from "../../components/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
 import NotifDialog from "../../components/NotifDialog";
@@ -242,6 +241,7 @@ const Tagihan = () => {
       <NotifDialog 
 				message="Apakah anda ingin menghapus data?"
 				status={false} 
+        onAcceptText="Ya, hapus"
 			/>
     </Box>
   );

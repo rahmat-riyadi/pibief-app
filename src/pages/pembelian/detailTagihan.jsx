@@ -10,7 +10,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Divider
 } from '@mui/material'
 import React from 'react'
 import BreadCrumbsNav from '../../components/BreadCrumbs'
@@ -147,6 +148,7 @@ const SecondRow = () => {
 
 const DetailTagihan = ({status  = 'Selesai'}) => {
 
+
   let tableData = [
 		{
       produk: 'Termometer',
@@ -258,49 +260,99 @@ const DetailTagihan = ({status  = 'Selesai'}) => {
                     </TableCell>
                   </TableRow>
                 ))}
-                <TableRow sx={{ position: 'relative' }} >
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600 }} >
-                      SubTotal 
-                      <Typography sx={{ fontSize: '14px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 350.000
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow sx={{ position: 'relative' }} >
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600 }} >
-                      PPN
-                      <Typography sx={{ fontSize: '14px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 72.600
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>  
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600 }} >
-                      Total 
-                      <Typography sx={{ fontSize: '14px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 650.000
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                <TableRow>  
-                  <TableCell colSpan={7} align='right'  sx={{ left: '0', position: 'relative' }} >
-                    <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600 }} >
-                      Sisa 
-                      <Typography sx={{ fontSize: '16px', fontWeight: 600, ml: 10, display: 'inline' }} >
-                          Rp. 0
-                      </Typography>
-                    </Typography>
-                  </TableCell>
-                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
+          <Stack alignItems="flex-end" direction="column" sx={{ mt: 2 }}>
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
+            >
+              SubTotal
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 350.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
+            >
+              PPN
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 72.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "16px", fontWeight: 600, pr: 2 }}
+            >
+              Total
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 650.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "18px", fontWeight: 600, pr: 2 }}
+            >
+              Sisa Tagihan
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 0
+              </Typography>
+            </Typography>
+          </Stack>
         </Box>
       </Box>
     </Box>

@@ -41,7 +41,7 @@ const BreadCrumbsNav = () => {
         <Link
           underline="hover"
           id={i}
-          color={url.length === i + 1 ? "primary" : "greyFont.main"}
+          color={url.length === i + 1 ? "secondary" : "greyFont.main"}
           sx={{
             fontSize: "14px",
             fontWeight: "300",
