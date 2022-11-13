@@ -16,7 +16,10 @@ import {
 	InputLabel,
 	InputBase,
 	FormGroup,
-	NativeSelect
+	NativeSelect,
+	Dialog,
+	DialogTitle,
+	DialogContent
 } from "@mui/material";
 import { useState } from "react";
 
@@ -41,6 +44,25 @@ const baseInputStyle = {
 	mb: 2
 }
 
+const DialogRow = ({ label1, text1, label2, text2 }) => {
+  return (
+    <Stack direction="row">
+      <Typography variant="body1" sx={{ fontWeight: "500", flex: 1 }}>
+        {label1}
+        <Typography variant="body1" sx={{ fontWeight: "300", mt: 1 }}>
+          {text1}
+        </Typography>
+      </Typography>
+      <Typography variant="body1" sx={{ fontWeight: "500", flex: 1 }}>
+        {label2}
+        <Typography variant="body1" sx={{ fontWeight: "300", mt: 1, mb: 2 }}>
+          {text2}
+        </Typography>
+      </Typography>
+    </Stack>
+  );
+};
+
 const CustomLabel = ({ label, target }) => {
 	return(
 		<InputLabel 
@@ -55,6 +77,7 @@ const CustomLabel = ({ label, target }) => {
 const VendorEntity = () => {
 
 	const [openDrawer, setOpenDrawer] = useState(false)
+	const [detailDialog, setDetailDialog] = useState(false)
 
 	let tableData = [
 		{
@@ -156,7 +179,7 @@ const VendorEntity = () => {
 								</TableCell>
 								<TableCell padding ='none' sx={{ pr: 2 }}  >
 									<Stack direction='row' justifyContent='space-between' >
-										<Button color='greyFont' variant='outlined' size='small' sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }} onClick={() => {}}   >
+										<Button color='greyFont' variant='outlined' size='small' sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }} onClick={() => setDetailDialog(true)}   >
 											Lihat
 										</Button>
 										<Button 
@@ -281,6 +304,53 @@ const VendorEntity = () => {
 					</Stack>
 				</Box>
 			</Drawer>
+			<Dialog
+				open={detailDialog}
+				PaperProps={{ sx: { width: '860px', maxWidth: 'unset' } }}
+			>
+				<DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            px: 5
+          }}
+        >
+          <Typography variant="body1" sx={{ fontWeight: "600" }}>
+            Detail Vendor
+          </Typography>
+          <IconButton onClick={ () => setDetailDialog(false)} >
+            <CloseRounded />
+          </IconButton>
+        </DialogTitle>
+				<DialogContent dividers sx={{ px: 3 }} >
+					<DialogRow label1='Nama Perusahaan' text1='PT. Khinta Permai' />
+					<Box sx={{ mb: 2 }} />
+					<DialogRow 
+						label1='Email' text1='khinta@gmail.com' 
+						label2='No. Telepon' text2='087895012' 
+					/>
+					<DialogRow 
+						label1='Provinsi' text1='Sulawesi Selatan' 
+						label2='Kab/Kota' text2='Gowa' 
+					/>
+					<DialogRow 
+						label1='Kecamatan' text1='Sombaopu' 
+						label2='Kelurahan' text2='Romang Polong' 
+					/>
+					<DialogRow label1='Detail Alamat' text1='Jl. Amirullah No. 13 samping MARI' />
+					<Stack direction='row' justifyContent='center' >
+						<Button 
+							variant='contained' 
+							disableElevation
+							size='large'
+							sx={{ bgcolor: '#FFC329', textTransform: 'capitalize', fontWeight: '400', width: '130px', mt: 3.5, mb: 2}}
+						>
+							Edit
+						</Button>
+					</Stack>
+				</DialogContent>
+			</Dialog>
 		</Box>
 	)
 };

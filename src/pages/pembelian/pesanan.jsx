@@ -36,8 +36,8 @@ const TableStatus = ({ status }) =>{
 			sx={{ 
 				width: 'fit-content', 
 				p: '6px 8px', 
-				bgcolor: status === 'Selesai' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
-				color: status === 'Selesai' ? '#50CD89' : '#F9A11B',
+				bgcolor: status === 'Terverifikasi' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
+				color: status === 'Terverifikasi' ? '#50CD89' : '#F9A11B',
 				borderRadius: '3px'
 			}} 
 	>
@@ -59,7 +59,7 @@ const Pesanan = () => {
 			name: 'Rahmat Riyadi Syam',
 			comp: 'PT. Khinta Permai',
 			order_date: '21-10-2022',
-			status: 'Selesai',
+			status: 'Terverifikasi',
 			total: 'Rp. 962.620',
 		},
 		{

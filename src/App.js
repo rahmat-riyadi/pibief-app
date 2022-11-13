@@ -6,6 +6,7 @@ import AppLayout from "./layout/appLayout";
 import IndexEntity from "./pages/entity";
 import CabangEntity from "./pages/entity/cabang";
 import KarywanEntity from "./pages/entity/karyawan";
+import TambahCabang from "./pages/entity/tambahCabang";
 import TambahKaryawan from "./pages/entity/tambahKaryawan";
 import VendorEntity from "./pages/entity/vendor";
 import Index from "./pages/home";
@@ -58,6 +59,7 @@ function App() {
               <Route path='karyawan' element={<KarywanEntity/>} />
               <Route path='karyawan/tambah' element={<TambahKaryawan/>} />
               <Route path='cabang' element={<CabangEntity/>} />
+              <Route path='cabang/tambah' element={<TambahCabang/>} />
               <Route path='vendor' element={<VendorEntity/>} />
             </Route>
         </Route>
