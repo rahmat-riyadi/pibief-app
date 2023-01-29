@@ -40,7 +40,7 @@ function App() {
             <AppLayout/>
           </ProtectedRoute>
         }>
-            <Route index element={<Index/>} />
+            <Route index path="/dashboard" element={<Index/>} />
             <Route path='pembelian/laporan' element={<Laporan/>} />
             <Route path='pembelian/pesanan' element={<Pesanan/>} />
             <Route path='pembelian/pesanan/detail/:id' element={<DetailPesanan/>} />

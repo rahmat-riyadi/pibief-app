@@ -20,7 +20,7 @@ const AppLayout = () => {
           </Box>
           <Box sx={{ display: 'flex', p: '12px', borderTop: '1px solid #EAEAEA' }} >
             <Typography variant='body1' sx={{ color: '#121215', m: 'auto', fontSize: '12px', fontWeight: '600' }} >
-              © Copyright 2022 - Pibief
+                © Copyright 2022 - Pibief
             </Typography>
           </Box>
         </Stack>

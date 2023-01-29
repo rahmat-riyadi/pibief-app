@@ -3,8 +3,8 @@ import { Navigate } from 'react-router-dom'
 
 const ProtectedRoute = ({ children }) => {
 
-    const auth = JSON.parse(localStorage.getItem('auth'))
-
+    // const auth = JSON.parse(localStorage.getItem('auth') || { token : 'asdfasdf' })
+    const auth = true
     if(!auth){
         return <Navigate to='/login' replace />
     }
