@@ -1,19 +1,11 @@
 import { Breadcrumbs, Link } from "@mui/material";
 import { KeyboardDoubleArrowRightRounded } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const BreadCrumbsNav = () => {
-  const [url, setUrl] = useState([]);
 
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line
-  }, []);
-
-  const getData = () => {
-    const url = getCurrentUrl();
-    setUrl(url);
-  };
+  const [url, setUrl] = useState([])
 
   const getCurrentUrl = () => {
     let url = window.location.href;
@@ -21,13 +13,17 @@ const BreadCrumbsNav = () => {
 
 		url = url.split("/");
 
-		if(url[url.length+1] === ''){
-			url.pop()
-			url.pop()
-		}
+		if(url[url.length-1] === '') url.pop()
 
     return url.slice(3);
   };
+
+  useEffect(() => {
+    const currUrl = getCurrentUrl()
+    setUrl(currUrl)
+    
+    // eslint-disable-next-line
+  },[])
 
   return (
     <Breadcrumbs
@@ -49,7 +45,7 @@ const BreadCrumbsNav = () => {
           }}
           href="/"
         >
-          {e}
+          {  e.replace('-', ' ')}
         </Link>
       ))}
     </Breadcrumbs>

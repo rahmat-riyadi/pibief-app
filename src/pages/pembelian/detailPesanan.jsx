@@ -1,4 +1,3 @@
-import { PictureAsPdf } from '@mui/icons-material'
 import { 
   Box,
   Button,
@@ -19,6 +18,9 @@ import NotifDialog from '../../components/NotifDialog'
 import { useDispatch } from 'react-redux'
 import { changeStatus } from '../../reducer/notifDialogSlice'
 import DetailVendorDialog from '../../components/DetailVendorDialog'
+import { PrintButton } from '../../components/PrintButton'
+import ReturnSvg from '../../assets/icons/return.svg'
+import { useState } from 'react'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -33,7 +35,31 @@ const tableDataStyle = {
 	py: 2
 }
 
-const FirstRow = () => {
+const ModalRow = props => {
+
+  const titleStyle = { fontSize: "16px", fontWeight: "500", flex: 1 }
+  const textStyle = { fontSize: "13px", color: '#121215', fontWeight: "300", mt: 0.5 }
+
+  return(
+   <Stack direction='row' mb={2} >
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title1}
+        <Typography sx={textStyle} >
+          {props.text1}
+        </Typography>
+      </Typography>
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title2}
+        <Typography sx={textStyle} >
+          {props.text2}
+        </Typography>
+      </Typography>
+   </Stack> 
+  )
+
+}
+
+const FirstRow = (props) => {
   return (
     <Grid container>
       <Grid item md={3}>
@@ -48,9 +74,14 @@ const FirstRow = () => {
               color: "secondary.main",
               fontWeight: "600",
               mt: 1,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
           >
-            PT. Khinta Permai
+            <span onClick={props.onClick} >
+              PT. Khinta Permai
+            </span>
           </Typography>
         </Typography>
       </Grid>
@@ -70,9 +101,9 @@ const FirstRow = () => {
           variant="body1"
           sx={{ fontSize: "12px", fontWeight: "300", mx: 8 }}
         >
-          Nomor Order
+          Apoteker PJ
           <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            P/01
+            St. Chadijah S. Farm
           </Typography>
         </Typography>
       </Grid>
@@ -150,20 +181,11 @@ const SecondRow = () => {
   )
 }
 
-const VendorDialogText = ({ title, text }) => {
-  return(
-    <Typography variant='body1' sx={{ fontWeight: '500', color: 'greyFont.main', mb: 1 }} >
-      {title}
-      <Typography variant='body1' sx={{ display: 'inline', fontWeight: '300' }} >
-        {text}
-      </Typography>
-    </Typography>
-  )
-}
-
 const DetailPesanan = ({status  = 'Selesai'}) => {
 
   const dispatch = useDispatch()
+
+  const [showVendorModal, setShowVendorModal] = useState(false)
 
   let tableData = [
 		{
@@ -205,7 +227,7 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
       <Box sx={{ border: '1px solid #EAEAEA' }} >
         <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #EAEAEA' }} >
           <Box 
-            sx={{ 
+            sx={{
               width: 'fit-content', 
               p: '6px 8px', 
               bgcolor: status === 'Selesai' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
@@ -219,18 +241,26 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
               {status}
             </Typography>
           </Box>
+          <Box flex={1} />
           <Button 
             variant='contained' 
             disableElevation
-            color='secondary'
-            startIcon={ <PictureAsPdf/> } 
-            sx={{ textTransform: 'capitalize', color: '#FFF', my: 2.5, mr: 2.5 }} 
-          >
-            Cetak SP
-          </Button>
+            startIcon={ <img src={ReturnSvg} alt="icn" /> } 
+            sx={{ 
+              textTransform: 'capitalize', 
+              color: '#FFF', 
+              my: 2.5, 
+              mr: 2.5 ,
+              bgcolor: '#F9A11B',
+              px: 3
+            }} 
+            >
+            Return
+        </Button>
+          <PrintButton disable={true} />
         </Stack> 
         <Box sx={{ p: 2.5 }} >
-          <FirstRow/>
+          <FirstRow onClick={() => setShowVendorModal(true)} />
           <SecondRow/>
           <ThirdRow/>
           <TableContainer sx={{ mt: 3 }} >
@@ -357,13 +387,37 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
         message='Data Anda Telah Diverifikasi'
         status={true}
       />
-      <DetailVendorDialog>
-        <VendorDialogText title="Penanggung Jawab " text=": Nurhikma " />
-        <VendorDialogText title="Perusahaan " text=": PT. Khinta " />
-        <VendorDialogText title="Alamat " text=": Jl Mannanti " />
-        <VendorDialogText title="NPWP " text=": 1234 5678 9111" />
-        <VendorDialogText title="Telepon " text=": 087819582058" />
-        <VendorDialogText title="Email " text=": ptkhinta@gmail.com" />
+      <DetailVendorDialog
+        open={showVendorModal}
+        onClose={ () => setShowVendorModal(false) }
+        onClick={ () => setShowVendorModal(false) }
+      >
+        <ModalRow 
+          title1='Nama Perusahaan'
+          text1='PT. Khinta'
+          title2='Email'
+          text2='khinta@gmail.com'
+        />
+        <ModalRow 
+          title1='No. Telepon'
+          text1='087819582058'
+        />
+        <ModalRow 
+          title1='Provinsi'
+          text1='Sulawesi Selatan'
+          title2='Kab/Kota'
+          text2='Makassar'
+        />
+        <ModalRow 
+          title1='Kecamatan'
+          text1='Manggala'
+          title2='Kelurahan'
+          text2='Borong'
+        />
+        <ModalRow 
+          title1='Detail Alamat'
+          text1='Jln Kenangan No. 12'
+        />
       </DetailVendorDialog>
     </Box>
   )

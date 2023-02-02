@@ -136,8 +136,8 @@ const Sidebar = () => {
           <ListButton 
             isDashboard={true}
             itemText="Dashboard"
-            icon={ <img src={ url.includes('dashboard') ? DashbaordActive : Dashbaord } alt="" /> } 
-            status={ url.includes('dashboard') }
+            icon={ <img src={ url.length === 2 ? DashbaordActive : Dashbaord } alt="" /> } 
+            status={ url.length === 2 }
             onClick={ () => navigate('/dashboard')}
           />
           <ListButtonExpand 
@@ -146,7 +146,7 @@ const Sidebar = () => {
             status={ url.includes('pembelian') }
             onClick={() => setShowPembelian(!showPembelian)}
           />
-          <Collapse in={showPembelian} sx={{ pl: 6 }} >
+          <Collapse in={showPembelian || url.includes('pembelian')} sx={{ pl: 6 }} >
             <List>
               <ListButton 
                 itemText="Laporan" 
@@ -172,9 +172,12 @@ const Sidebar = () => {
             itemText="Penjualan"
             icon={<img src={ url.includes('penjualan') ? SelectedDiscount : Discount } alt="" />} 
             status={url.includes('penjualan')}
-            onClick={() => setShowPenjualan(!showPenjualan)}
+            onClick={() => {
+              setShowPenjualan(!showPenjualan)
+              setShowPembelian(false)
+            }}
           />
-          <Collapse in={showPenjualan} sx={{ pl: 6 }} >
+          <Collapse in={showPenjualan || url.includes('penjualan') } sx={{ pl: 6 }} >
             <List>
               <ListButton 
                 itemText="Penjualan"

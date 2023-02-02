@@ -11,9 +11,10 @@ import TambahKaryawan from "./pages/entity/tambahKaryawan";
 import VendorEntity from "./pages/entity/vendor";
 import Index from "./pages/home";
 import LoginPage from "./pages/login";
+import Laporan from "./pages/pembelian/laporan/laporan";
+import MenungguPembayaran from "./pages/pembelian/laporan/menungguPembayaran";
 import DetailPesanan from "./pages/pembelian/detailPesanan";
 import DetailTagihan from "./pages/pembelian/detailTagihan";
-import Laporan from "./pages/pembelian/laporan";
 import Pesanan from "./pages/pembelian/pesanan";
 import Tagihan from "./pages/pembelian/tagihan";
 import TambahPesanan from "./pages/pembelian/tambahPesanan";
@@ -25,6 +26,7 @@ import PesananPenjualan from "./pages/penjualan/pesanan";
 import TagihanPenjualan from "./pages/penjualan/tagihan";
 import TambahPesananPenjualan from "./pages/penjualan/tambahPesanan";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import JatuhTempo from "./pages/pembelian/laporan/jatuhTempo";
 
 function App() {
   return (
@@ -40,13 +42,24 @@ function App() {
             <AppLayout/>
           </ProtectedRoute>
         }>
-            <Route index path="/dashboard" element={<Index/>} />
-            <Route path='pembelian/laporan' element={<Laporan/>} />
+            <Route index element={<Index/>} />
+            <Route path='pembelian'>
+              <Route path='laporan'  >
+                <Route index element={<Laporan/>}/>
+                <Route path='menunggu-pembayaran' element={<MenungguPembayaran/>}/>
+                <Route path='jatuh-tempo' element={<JatuhTempo/>}/>
+              </Route>
+              <Route path='pesanan' >
+                <Route index element={<Pesanan/>} />
+                <Route path='detail/:id' element={<DetailPesanan/>} />
+              </Route>
+            </Route>
+            {/* <Route path='pembelian/laporan' element={<Laporan/>} />
             <Route path='pembelian/pesanan' element={<Pesanan/>} />
             <Route path='pembelian/pesanan/detail/:id' element={<DetailPesanan/>} />
             <Route path='pembelian/pesanan/tambah' element={<TambahPesanan/>} />
             <Route path='pembelian/tagihan' element={<Tagihan/>} />
-            <Route path='pembelian/tagihan/detail/:id' element={<DetailTagihan/>} />
+            <Route path='pembelian/tagihan/detail/:id' element={<DetailTagihan/>} /> */}
             <Route path='penjualan' element={<IndexPembelian/>} >
               <Route path="laporan" element={<LaporanPenjualan/>} />
               <Route path="pesanan" element={<PesananPenjualan/>} />

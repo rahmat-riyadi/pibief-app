@@ -1,22 +1,18 @@
 import { 
-	Box, 
-	Stack,
-	TableCell,
+	Table, 
 	TableContainer,
 	TableHead,
 	TableRow,
-	Typography, 
-	Table,
-	TableBody
-} from '@mui/material'
-import React from 'react'
-import BreadCrumbsNav from '../../components/BreadCrumbs'
-import { useNavigate } from 'react-router-dom'
-import NotifDialog from '../../components/NotifDialog'
-import { TableButton } from '../../components/TableButton'
-import { FilterBox } from '../../components/FilterBox'
-import { AddButton } from '../../components/AddButton'
-import { useState } from 'react'
+	TableCell,
+	TableBody,
+	Box,
+	Typography,
+	Stack,
+	Button,
+	InputBase
+} from "@mui/material"
+import BreadCrumbsNav from "../../../components/BreadCrumbs"
+import { TableButton } from "../../../components/TableButton"
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -31,7 +27,10 @@ const tableDataStyle = {
 	py: 2
 }
 
+const btnBaseStyle = { textTransform: 'capitalize', fontSize: '12px', p: '6px 8px', flex: 1 }
+
 const TableStatus = ({ status }) =>{
+	
 	return(
 		<Box 
 			sx={{ 
@@ -49,12 +48,7 @@ const TableStatus = ({ status }) =>{
 	)
 }
 
-const Pesanan = () => {
-
-	const navigate = useNavigate()
-
-	const [showModal, setShowModal] = useState(false)
-
+const MenungguPembayaran = () => {
 
 	let tableData = [
 		{
@@ -79,20 +73,30 @@ const Pesanan = () => {
 		tableData.push(tableData[i % 2])
 	}
 
-  return (
-    	<Box>
+	return (
+		<Box>
 			<BreadCrumbsNav/>
-			<Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 2 }}  >
-				<Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
-					Pesanan
+			<Typography variant='body1' sx={{ fontSize: '21px', fontWeight: '600', my: 2 }} >
+				Menunggu Pembayaran
+			</Typography>
+			<Box sx={{ bgcolor: 'primary.main', p: 2, borderRadius: '10px 10px 0 0' }} >
+				<Typography 
+					variant="body1" 
+					sx={{ color: '#fff', fontSize: '12px', mb: 1 }}
+				>
+					Cari Data
 				</Typography>
-				<AddButton
-					title='Tambah Pesanan'
-					onClick={ () => navigate('/pembelian/pesanan/tambah') }
+				<InputBase
+					sx={{ 
+						bgcolor: '#fff',
+						width: 270,
+						px: 2,
+						py: 0.3,
+						borderRadius: '5px'
+					}}
 				/>
-			</Stack>
-			<FilterBox/>
-			<TableContainer  >
+			</Box>
+			<TableContainer>
 				<Table>
 					<TableHead >
 						<TableRow  >
@@ -143,16 +147,14 @@ const Pesanan = () => {
 								<TableCell padding='none' sx={{ ...tableDataStyle, color: '#121215' }} >
 									{e.total}
 								</TableCell>
-								<TableCell padding ='none' sx={{ pr: 2 }}  >
+								<TableCell padding ='none'  >
 									<Stack direction='row' justifyContent='space-between' columnGap={1} >
 										<TableButton
 											title='Lihat'
-											onClick={() => navigate('detail/1')}
 										/>
 										<TableButton
 											title='Hapus'
 											type='delete'
-											onClick={() => setShowModal(true)}
 										/>
 									</Stack>
 								</TableCell>
@@ -161,17 +163,9 @@ const Pesanan = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<NotifDialog
-				show={showModal}
-				message="Apakah anda ingin menghapus data?"
-				status={false}
-				onAcceptText="Ya, hapus"
-				onCancelText='Batal'
-				onAccept={() => setShowModal(false)} 
-				onCancel={() => setShowModal(false)} 
-			/>
-    </Box>
-  )
+		</Box>
+	)
+
 }
 
-export default Pesanan
+export default MenungguPembayaran

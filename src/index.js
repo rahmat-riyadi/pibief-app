@@ -28,6 +28,9 @@ const theme = createTheme({
     },
     white: {
       main: '#fff'
+    },
+    disable: {
+      main: '#E0E4E9'
     }
   }
 })

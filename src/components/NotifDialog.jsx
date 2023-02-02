@@ -1,24 +1,18 @@
 import { Dialog, Stack, Typography, Button } from "@mui/material";
 import warning from "../assets/image/warning.svg";
 import success from "../assets/image/done.svg";
-import { useSelector, useDispatch } from "react-redux";
-import { changeStatus } from "../reducer/notifDialogSlice";
-
-const NotifDialog = ({ message, status, onAccept, onAcceptText }) => {
-  const { show } = useSelector((state) => state.notifDialogReducer);
-
-  const dispatch = useDispatch();
+const NotifDialog = (props) => {
 
   return (
-    <Dialog open={show}>
+    <Dialog open={props.show}>
       <Stack sx={{ m: 3, minWidth: '282px' }} direction="column" alignItems="center">
         <img
-          src={status ? success : warning}
-          alt={status ? success : warning}
+          src={props.status ? success : warning}
+          alt={props.status ? success : warning}
           style={{ width: "100px" }}
         />
 				{ 
-					status 
+					props.status 
 					&&
 					<Typography
 						variant="body1"
@@ -28,23 +22,23 @@ const NotifDialog = ({ message, status, onAccept, onAcceptText }) => {
 					</Typography>
 				}
 				{
-					status
+					props.status
 					?
 					<Typography
 						variant="body1"
 						sx={{  color: "#181C32", fontSize: "14px", fontWeight: '300' }}
 					>
-						{message}
+						{props.message}
 					</Typography>
 					:
 					<Typography
 						variant="body1"
 						sx={{ my: 3, color: "#181C32", fontSize: "14px" }}
 					>
-						{message}
+						{props.message}
 					</Typography>
 				}
-        {!status && (
+        {!props.status && (
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -55,18 +49,18 @@ const NotifDialog = ({ message, status, onAccept, onAcceptText }) => {
               variant="outlined"
               color="secondary"
               sx={{ textTransform: "none", width: "132px" }}
-              onClick={() => dispatch(changeStatus(false))}
+              onClick={props.onCancel}
             >
-              Batal
+              {props.onCancelText}
             </Button>
             <Button
               variant="contained"
               disableElevation
               color="secondary"
               sx={{ textTransform: "none", width: "132px", color: "#fff" }}
-              onClick={onAccept}
+              onClick={props.onAccept}
             >
-              {onAcceptText}
+              {props.onAcceptText}
             </Button>
           </Stack>
         )}
