@@ -1,4 +1,3 @@
-import { PictureAsPdf } from '@mui/icons-material'
 import { 
   Box,
   Button,
@@ -13,10 +12,10 @@ import {
   Grid,
   Divider
 } from '@mui/material'
-import React from 'react'
-import NotifDialog from '../../components/NotifDialog'
-import { useDispatch } from 'react-redux'
-import { changeStatus } from '../../reducer/notifDialogSlice'
+import React, { useState } from 'react'
+import NotifDialog from '../../../components/NotifDialog'
+import { useParams } from 'react-router-dom'
+import PrintIcon from '../../../assets/icons/printer.svg'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -29,6 +28,13 @@ const tableHeadStyle = {
 const tableDataStyle = {
 	fontSize: 12,
 	py: 2
+}
+
+const buttonProps = {
+  disableElevation: true,
+  fullWidth: true,
+  variant: 'contained',
+  color:'secondary'
 }
 
 const FirstRow = () => {
@@ -148,9 +154,11 @@ const SecondRow = () => {
   )
 }
 
-const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
+const DetailPesananPenjualan = () => {
 
-  const dispatch = useDispatch()
+  const { status } = useParams()
+
+  const [showDialog, setShowDialog] = useState(false)
 
   let tableData = [
 		{
@@ -175,10 +183,10 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
 
   const handleClick = () => {
 
-    dispatch(changeStatus(true))
+    setShowDialog(true)
 
     setTimeout(() => {
-      dispatch(changeStatus(false))
+      setShowDialog(false)
     }, 2000)
 
   }
@@ -200,33 +208,41 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
               width: "fit-content",
               p: "6px 8px",
               bgcolor:
-                status === "Selesai"
+                status === "Verifikasi"
                   ? "rgba(80, 205, 137, 0.2)"
                   : "rgba(249, 161, 27, 0.2)",
-              color: status === "Selesai" ? "#50CD89" : "#F9A11B",
+              color: status === "Verifikasi" ? "#50CD89" : "#F9A11B",
               borderRadius: "3px",
               my: 2.5,
               ml: 2.5,
             }}
           >
+            {
+            status === 'Verifikasi'
+            &&
             <Typography variant="body1" sx={{ fontSize: "12px" }}>
               {status}
             </Typography>
+          }
           </Box>
-          <Button
-            variant="contained"
-            disableElevation
-            color="secondary"
-            startIcon={<PictureAsPdf />}
-            sx={{
-              textTransform: "capitalize",
-              color: "#FFF",
-              my: 2.5,
-              mr: 2.5,
-            }}
-          >
-            Cetak SP
-          </Button>
+          {
+            status === 'Verifikasi'
+            &&
+            <Button
+              variant="contained"
+              disableElevation
+              color="secondary"
+              startIcon={<img src={PrintIcon} alt='' />}
+              sx={{
+                textTransform: "capitalize",
+                color: "#FFF",
+                my: 2.5,
+                mr: 2.5,
+              }}
+            >
+              Cetak Faktur
+            </Button>
+          }
         </Stack>
         <Box sx={{ p: 2.5 }}>
           <FirstRow />
@@ -302,7 +318,7 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
                   display: "inline",
                 }}
               >
-                Rp. 650.000
+                Rp. 650.000 
               </Typography>
             </Typography>
             <Divider
@@ -313,24 +329,47 @@ const DetailPesananPenjualan = ({ status = 'Selesai' }) => {
                 my: 2,
               }}
             />
-            <Box sx={{ minWidth: "400px", width: "250px" }}>
-              <Button
-                disableElevation
-                fullWidth
-                variant="contained"
-                color="secondary"
-                sx={{ textTransform: "capitalize", color: "#FFF" }}
-                onClick={handleClick}
-              >
-                Verifikasi
-              </Button>
-            </Box>
+            {
+              status === 'Menunggu'
+              &&
+              <Box sx={{ minWidth: "400px", width: "250px", display: 'flex', columnGap: 1.5 }}>
+                <Button
+                  {...buttonProps}
+                  sx={{ 
+                    textTransform: "capitalize", 
+                    color: "#FFF", 
+                    bgcolor: '#C92B28',
+                    '&:hover':{
+                      bgcolor: '#C92B28'
+                    }
+                  }}
+                  onClick={handleClick}
+                >
+                  Tolak
+                </Button>
+                <Button
+                  {...buttonProps}
+                  sx={{ 
+                    textTransform: "capitalize", 
+                    color: "#FFF", 
+                    bgcolor: '#50CD89',
+                    '&:hover':{
+                      bgcolor: '#50CD89'
+                    }
+                  }}
+                  onClick={() => handleClick()}
+                >
+                  Verifikasi
+                </Button>
+              </Box>
+            }
           </Stack>
         </Box>
       </Box>
       <NotifDialog
         message='Data Anda Telah Diverifikasi'
         status={true}
+        show={showDialog}
       />
     </div>
   );

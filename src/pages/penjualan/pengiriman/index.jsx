@@ -1,20 +1,18 @@
-import {
-  Box,
-  Button,
-  Stack,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Table,
-  TableBody,
-} from "@mui/material";
-import BreadCrumbsNav from "../../components/BreadCrumbs";
-import { useNavigate } from "react-router-dom";
-import NotifDialog from "../../components/NotifDialog";
-import { useDispatch } from "react-redux";
-import { changeStatus } from "../../reducer/notifDialogSlice";
+import { 
+    Box, 
+		Stack, 
+		Table, 
+		TableBody, 
+		TableCell, 
+		TableContainer, 
+		TableHead,
+		TableRow, 
+		Typography 
+} from "@mui/material"
+import { AddButton } from "../../../components/AddButton"
+import BreadCrumbsNav from "../../../components/BreadCrumbs"
+import { FilterBox } from "../../../components/FilterBox"
+import { TableButton } from "../../../components/TableButton";
 
 const tableHeadStyle = {
   border: "none",
@@ -36,10 +34,17 @@ const TableStatus = ({ status }) => {
         width: "fit-content",
         p: "6px 8px",
         bgcolor:
-          status === "Lunas"
-            ? "rgba(80, 205, 137, 0.2)"
-            : "rgba(249, 161, 27, 0.2)",
-        color: status === "Lunas" ? "#50CD89" : "#F9A11B",
+          status === "Dikemas"
+            ? "rgba(201, 43, 40, 0.2)"
+            : (status === 'Dikirim')
+							? "rgba(249, 161, 27, 0.2)"
+							: 'rgba(51, 160, 43, 0.2)',
+        color:
+          status === "Dikemas"
+            ? "#C92B28"
+            : (status === 'Dikirim')
+							? "#F9A11B"
+							: '#33A02B',
         borderRadius: "3px",
       }}
     >
@@ -50,52 +55,60 @@ const TableStatus = ({ status }) => {
   );
 };
 
-const Tagihan = () => {
 
-	const dispatch = useDispatch()
-  const navigate = useNavigate();
+const PengirimanPenjualan = () => {
 
-  let tableData = [
+	let tableData = [
     {
       num: "P-01",
-      name: "Rahmat Riyadi Syam",
+      name: "Rahmat",
       comp: "PT. Khinta Permai",
-      order_date: "21-10-2022",
-      status: "Lunas",
-      total: "Rp. 962.620",
-      sisa: "Rp. 0",
+      regency: 'Sinjai',
+      address: 'Jln Amirullah No 13',
+      orderDate: '17-11-2023',
+			phone: '087819582058',
+			status: 'Dikemas'
     },
     {
       num: "P-01",
-      name: "Nurhikma",
+      name: "Riyadi",
       comp: "PT. Khinta Permai",
-      order_date: "21-10-2022",
-      status: "Belum dibayar",
-      total: "Rp. 962.620",
-      sisa: "Rp. 1.000.000",
+      regency: 'Sinjai',
+      address: 'Jln Amirullah No 13',
+      orderDate: '17-11-2023',
+			phone: '087819582058',
+			status: 'Dikirim'
+    },
+    {
+      num: "P-01",
+      name: "Syam",
+      comp: "PT. Khinta Permai",
+      regency: 'Sinjai',
+      address: 'Jln Amirullah No 13',
+      orderDate: '17-11-2023',
+			phone: '087819582058',
+			status: 'Selesai'
     },
   ];
 
   for (let i = 0; i < 5; i++) {
-    tableData.push(tableData[i % 2]);
+    tableData.push(tableData[i % 3]);
   }
 
-  return (
-    <Box>
-      <BreadCrumbsNav />
-      <Typography
-        variant="h5"
-        sx={{ my: "20px", fontSize: 21, fontWeight: 600 }}
-      >
-        Tagihan
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ fontWeight: "300", fontSize: 12, mb: 2 }}
-      >
-        Tampilkan 10 Pesanan
-      </Typography>
-      <TableContainer sx={{}}>
+	return(
+		<Box>
+			<BreadCrumbsNav />
+				<Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 2 }}  >
+				<Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
+					Pengiriman
+				</Typography>
+				<AddButton
+					title='Tambah Tagihan'
+					onClick={ () => {} }
+				/>
+			</Stack>
+			<FilterBox/>
+			<TableContainer>
         <Table>
           <TableHead>
             <TableRow>
@@ -109,37 +122,37 @@ const Tagihan = () => {
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "150px" }}
               >
-                Vendor
+                Apotek
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "100px" }}
               >
-                Tanggal Pesan
+                Kabupaten
+              </TableCell>
+              <TableCell
+                padding="none"
+                sx={{ ...tableHeadStyle, width: "100px" }}
+              >
+                Alamat
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "150px" }}
               >
-                Tanggal Jatuh Tempo
+                Tanggal Pesan
+              </TableCell>
+              <TableCell
+                padding="none"
+                sx={{ ...tableHeadStyle, width: "100px" }}
+              >
+                No. Telepon
               </TableCell>
               <TableCell
                 padding="none"
                 sx={{ ...tableHeadStyle, width: "100px" }}
               >
                 Status
-              </TableCell>
-              <TableCell
-                padding="none"
-                sx={{ ...tableHeadStyle, width: "100px" }}
-              >
-                Sisa Tagihan
-              </TableCell>
-              <TableCell
-                padding="none"
-                sx={{ ...tableHeadStyle, width: "100px" }}
-              >
-                Total
               </TableCell>
               <TableCell
                 padding="none"
@@ -151,7 +164,7 @@ const Tagihan = () => {
           </TableHead>
           <TableBody>
             {tableData.map((e, i) => (
-              <TableRow hover>
+              <TableRow id={i} hover>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, pl: 2, color: "#121215" }}
@@ -177,74 +190,53 @@ const Tagihan = () => {
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.order_date}
+									{e.regency}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.order_date}
+                  {e.address}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  <TableStatus status={e.status} />
+                  {e.orderDate}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.sisa}
+                  {e.phone}
                 </TableCell>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, color: "#121215" }}
                 >
-                  {e.total}
+									<TableStatus status={e.status} />
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      style={{
-                        p: "8px",
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                      }}
-                      onClick={() => navigate("/pembelian/tagihan/detail/:id")}
-                    >
-                      Lihat
-                    </Button>
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      style={{
-                        p: "8px",
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                      }}
-											onClick={() => dispatch(changeStatus(true))}
-                    >
-                      Hapus
-                    </Button>
-                  </Stack>
+                  <Stack direction='row' justifyContent='space-between' columnGap={1} >
+										<TableButton
+											title='Lihat'
+											onClick={() => {}}
+										/>
+										<TableButton
+											title='Hapus'
+											type='delete'
+											onClick={() => {}}
+										/>
+									</Stack>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <NotifDialog 
-				message="Apakah anda ingin menghapus data?"
-				status={false} 
-        onAcceptText="Ya, hapus"
-			/>
-    </Box>
-  );
-};
+		</Box>
+	)
 
-export default Tagihan;
+}
+
+export default PengirimanPenjualan

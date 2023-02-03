@@ -1,22 +1,17 @@
 import { 
-	Box, 
-	Stack,
-	TableCell,
+	Table, 
 	TableContainer,
 	TableHead,
 	TableRow,
-	Typography, 
-	Table,
-	TableBody
-} from '@mui/material'
-import React from 'react'
-import BreadCrumbsNav from '../../components/BreadCrumbs'
-import { useNavigate } from 'react-router-dom'
-import NotifDialog from '../../components/NotifDialog'
-import { TableButton } from '../../components/TableButton'
-import { FilterBox } from '../../components/FilterBox'
-import { AddButton } from '../../components/AddButton'
-import { useState } from 'react'
+	TableCell,
+	TableBody,
+	Box,
+	Typography,
+	Stack,
+	InputBase
+} from "@mui/material"
+import BreadCrumbsNav from "../../../components/BreadCrumbs"
+import { TableButton } from "../../../components/TableButton"
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -32,13 +27,14 @@ const tableDataStyle = {
 }
 
 const TableStatus = ({ status }) =>{
+	
 	return(
 		<Box 
 			sx={{ 
 				width: 'fit-content', 
 				p: '6px 8px', 
-				bgcolor: status === 'Terverifikasi' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
-				color: status === 'Terverifikasi' ? '#50CD89' : '#F9A11B',
+				bgcolor: 'rgba(201, 43, 40, 0.2)',
+				color: '#C92B28',
 				borderRadius: '3px'
 			}} 
 	>
@@ -49,12 +45,7 @@ const TableStatus = ({ status }) =>{
 	)
 }
 
-const Pesanan = () => {
-
-	const navigate = useNavigate()
-
-	const [showModal, setShowModal] = useState(false)
-
+const JatuhTempo = () => {
 
 	let tableData = [
 		{
@@ -62,37 +53,39 @@ const Pesanan = () => {
 			name: 'Rahmat Riyadi Syam',
 			comp: 'PT. Khinta Permai',
 			order_date: '21-10-2022',
-			status: 'Terverifikasi',
+			status: 'Jatuh Tempo',
 			total: 'Rp. 962.620',
 		},
-		{
-			num: 'P-01',
-			name: 'Nurhikma',
-			comp: 'PT. Khinta Permai',
-			order_date: '21-10-2022',
-			status: 'Menunggu',
-			total: 'Rp. 962.620',
-		}
 	]
 
 	for(let i = 0; i < 5; i++){
-		tableData.push(tableData[i % 2])
+		tableData.push(tableData[0])
 	}
 
-  return (
-    	<Box>
+	return (
+		<Box>
 			<BreadCrumbsNav/>
-			<Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 2 }}  >
-				<Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
-					Pesanan
+			<Typography variant='body1' sx={{ fontSize: '21px', fontWeight: '600', my: 2 }} >
+				Jatuh Tempo
+			</Typography>
+			<Box sx={{ bgcolor: 'primary.main', p: 2, borderRadius: '10px 10px 0 0' }} >
+				<Typography 
+					variant="body1" 
+					sx={{ color: '#fff', fontSize: '12px', mb: 1 }}
+				>
+					Cari Data
 				</Typography>
-				<AddButton
-					title='Tambah Pesanan'
-					onClick={ () => navigate('/pembelian/pesanan/tambah') }
+				<InputBase
+					sx={{ 
+						bgcolor: '#fff',
+						width: 270,
+						px: 2,
+						py: 0.3,
+						borderRadius: '5px'
+					}}
 				/>
-			</Stack>
-			<FilterBox/>
-			<TableContainer  >
+			</Box>
+			<TableContainer>
 				<Table>
 					<TableHead >
 						<TableRow  >
@@ -121,7 +114,7 @@ const Pesanan = () => {
 					</TableHead>
 					<TableBody>
 						{tableData.map((e,i) => (
-							<TableRow id={i} hover >
+							<TableRow key={i} id={i} hover >
 								<TableCell padding='none'  sx={{ ...tableDataStyle, pl: 2, color: '#121215' }} >
 									{e.num}
 								</TableCell>
@@ -143,16 +136,14 @@ const Pesanan = () => {
 								<TableCell padding='none' sx={{ ...tableDataStyle, color: '#121215' }} >
 									{e.total}
 								</TableCell>
-								<TableCell padding ='none' sx={{ pr: 2 }}  >
+								<TableCell padding ='none'  >
 									<Stack direction='row' justifyContent='space-between' columnGap={1} >
 										<TableButton
 											title='Lihat'
-											onClick={() => navigate('detail/1')}
 										/>
 										<TableButton
 											title='Hapus'
 											type='delete'
-											onClick={() => setShowModal(true)}
 										/>
 									</Stack>
 								</TableCell>
@@ -161,17 +152,9 @@ const Pesanan = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<NotifDialog
-				show={showModal}
-				message="Apakah anda ingin menghapus data?"
-				status={false}
-				onAcceptText="Ya, hapus"
-				onCancelText='Batal'
-				onAccept={() => setShowModal(false)} 
-				onCancel={() => setShowModal(false)} 
-			/>
-    </Box>
-  )
+		</Box>
+	)
+
 }
 
-export default Pesanan
+export default JatuhTempo

@@ -180,7 +180,7 @@ const Sidebar = () => {
           <Collapse in={showPenjualan || url.includes('penjualan') } sx={{ pl: 6 }} >
             <List>
               <ListButton 
-                itemText="Penjualan"
+                itemText="Laporan"
                 icon={<img src={ url.includes('penjualan') && url.includes('laporan') ? SelectedBox : UnselectedBox } alt="" />} 
                 status={ url.includes('penjualan') && url.includes('laporan') }
                 onClick={ () => navigate('/penjualan/laporan')}
@@ -201,7 +201,7 @@ const Sidebar = () => {
                 itemText="Pengiriman"
                 icon={<img src={ url.includes('penjualan') && url.includes('pengiriman') ? SelectedBox : UnselectedBox } alt="" />} 
                 status={ url.includes('penjualan') && url.includes('pengiriman') }
-                onClick={ () => {} }
+                onClick={ () => navigate('/penjualan/pengiriman') }
               />
               <ListButton 
                 itemText="Penawaran"

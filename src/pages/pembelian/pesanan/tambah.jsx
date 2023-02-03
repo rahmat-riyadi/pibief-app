@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import BreadCrumbsNav from "../../components/BreadCrumbs";
+import BreadCrumbsNav from "../../../components/BreadCrumbs";
 import { useState } from "react";
 import { AddRounded, Delete, KeyboardArrowDownRounded } from "@mui/icons-material";
 import { useForm } from "react-hook-form";

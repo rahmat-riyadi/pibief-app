@@ -15,9 +15,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { changeStatus } from "../../reducer/notifDialogSlice";
-import NotifDialog from "../../components/NotifDialog";
+import NotifDialog from "../../../components/NotifDialog";
+import { FilterBox } from "../../../components/FilterBox";
+import { AddButton } from "../../../components/AddButton";
+import { TableButton } from "../../../components/TableButton";
 
 const tableHeadStyle = {
   border: "none",
@@ -34,15 +35,11 @@ const tableDataStyle = {
 
 const PesananPenjualan = () => {
 
+  const [showModal, setShowModal] = useState(false)
+
   const [tabValue, setTabValue] = useState(0);
-  const [dialogOpt, setDialogOpt] = useState({
-    message: "Apakah anda ingin Menolak data?",
-    status: false,
-    onAcceptText: "Ya, hapus"
-  })
 
   const navigate = useNavigate();
-  const dispatch = useDispatch()
 
   let tableData = [
     {
@@ -50,7 +47,7 @@ const PesananPenjualan = () => {
       name: "Rahmat Riyadi Syam",
       comp: "PT. Khinta Permai",
       order_date: "21-10-2022",
-      status: "Verikasi",
+      status: "Verifikasi",
       total: "Rp. 962.620",
     },
     {
@@ -65,43 +62,6 @@ const PesananPenjualan = () => {
 
   for (let i = 0; i < 5; i++) {
     tableData.push(tableData[i % 2]);
-  }
-
-  const handleRightButtonClick = (status) => {
-
-    if(status !== "Menunggu"){
-      setDialogOpt({
-        message: "Apakah anda ingin menghapus data?",
-        status: false,
-        onAcceptText: "Ya, hapus"
-      })
-      dispatch(changeStatus(true))
-    } else {
-      setDialogOpt({
-        message: "Apakah anda ingin menolak data?",
-        status: false,
-        onAcceptText: "Ya, tolak"
-      })
-      dispatch(changeStatus(true))
-    }
-
-  }
-
-  const handleLeftButtonClick = (status, i) => {
-
-    if(status !== "Menunggu"){
-      navigate(`detail/${i}`)
-    } else {
-      setDialogOpt({
-        message: 'Data Anda Telah Diverifikasi',
-        status: true,
-        onAcceptText: ""
-      })
-      dispatch(changeStatus(true))
-
-      setTimeout(() => dispatch(changeStatus(false)), 1500)
-    }
-
   }
 
   return (
@@ -152,34 +112,20 @@ const PesananPenjualan = () => {
         </Tabs>
       </Box>
       <Divider />
-      <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
-        Pesanan {tabValue === 0 ? "Online" : "Offline"}
-      </Typography>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 2 }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: "300", fontSize: 12 }}>
-          Tampilkan 10 Pesanan
-        </Typography>
-        {tabValue !== 0 && (
-          <Button
-            variant="contained"
-            disableElevation
-            color="secondary"
-            sx={{
-              width: "fit-content",
-              color: "#fff",
-              textTransform: "capitalize",
-            }}
-            onClick={() => navigate("/penjualan/pesanan/tambah")}
-          >
-            Tambah Pesanan
-          </Button>
-        )}
-      </Stack>
+      <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 2 }}  >
+				<Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
+					Pesanan {tabValue === 0 ? "Online" : "Offline"}
+				</Typography>
+        {
+          tabValue !== 0 && (
+            <AddButton
+              title='Tambah Pesanan'
+              onClick={ () => navigate('tambah') }
+            />
+          )
+        }
+			</Stack>
+      <FilterBox/>
       <TableContainer>
         <Table>
           <TableHead>
@@ -277,58 +223,55 @@ const PesananPenjualan = () => {
                   {e.total}
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      variant={
-                        e.status === "Menunggu" ? "contained" : "outlined"
-                      }
-                      size="small"
-                      disableElevation
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px",
-                        color:
-                          e.status === "Menunggu" ? "#fff" : "greyFont.main",
-                        bgcolor:
-                          e.status === "Menunggu"
-                            ? "secondary.main"
-                            : "transparent",
-                      }}
-                      onClick={() => handleLeftButtonClick(e.status, i)}
-                    >
-                      {e.status === "Menunggu" ? "Verifikasi" : "Lihat"}
-                    </Button>
-                    <Button
-                      variant={
-                        e.status === "Menunggu" ? "contained" : "outlined"
-                      }
-                      size="small"
-                      disableElevation
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px !important",
-                        color:
-                          e.status === "Menunggu" ? "#fff" : "greyFont.main",
-                        bgcolor:
-                          e.status === "Menunggu" ? "#C92B28" : "transparent",
-                      }}
-                      onClick={() => handleRightButtonClick(e.status)}
-                    >
-                      {e.status === "Menunggu" ? "Tolak" : "Hapus"}
-                    </Button>
-                  </Stack>
+                  <Stack direction='row' justifyContent='space-between' columnGap={1} >
+                    {
+                      e.status === 'Menunggu'
+                      ?
+                      <Button
+                        sx={{ 
+                          bgcolor: '#50CD89',
+                          flex: 1,
+                          fontSize: 12,
+                          textTransform: 'none',
+                          color: '#fff',
+                          py: '6px',
+                          '&:hover':{
+                            bgcolor: '#3EBA77'
+                          }
+                        }}
+                        onClick={() => navigate('detail/' + e.status)}
+                          
+                      >
+                        Verifikasi
+                      </Button>
+                      :
+                      <>
+                        <TableButton
+                          title='Lihat'
+                          onClick={() => navigate('detail/' + e.status)}
+                        />
+                        <TableButton
+                          title='Hapus'
+                          type='delete'
+                          onClick={() => setShowModal(true)}
+                        />
+                      </>
+                    }
+									</Stack>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <NotifDialog 
-				message={dialogOpt.message}
-				status={dialogOpt.status}
-        onAcceptText={dialogOpt.onAcceptText}
+      <NotifDialog
+				show={showModal}
+				message="Apakah anda ingin menghapus data?"
+				status={false}
+				onAcceptText="Ya, hapus"
+				onCancelText='Batal'
+				onAccept={() => setShowModal(false)} 
+				onCancel={() => setShowModal(false)} 
 			/>
     </Box>
   );

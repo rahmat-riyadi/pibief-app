@@ -13,20 +13,32 @@ import Index from "./pages/home";
 import LoginPage from "./pages/login";
 import Laporan from "./pages/pembelian/laporan/laporan";
 import MenungguPembayaran from "./pages/pembelian/laporan/menungguPembayaran";
-import DetailPesanan from "./pages/pembelian/detailPesanan";
-import DetailTagihan from "./pages/pembelian/detailTagihan";
-import Pesanan from "./pages/pembelian/pesanan";
-import Tagihan from "./pages/pembelian/tagihan";
-import TambahPesanan from "./pages/pembelian/tambahPesanan";
-import IndexPembelian from "./pages/penjualan";
-import DetailPesananPenjualan from "./pages/penjualan/detailPesanan";
-import DetailTagihanPenjualan from "./pages/penjualan/detailTagihan";
-import LaporanPenjualan from "./pages/penjualan/laporan";
-import PesananPenjualan from "./pages/penjualan/pesanan";
-import TagihanPenjualan from "./pages/penjualan/tagihan";
-import TambahPesananPenjualan from "./pages/penjualan/tambahPesanan";
+import DetailTagihan from "./pages/pembelian/tagihan/detail";
+
 import ProtectedRoute from "./utils/ProtectedRoute";
+
+// =================> Pembelian 
+import Pesanan from "./pages/pembelian/pesanan";
+import DetailPesanan from "./pages/pembelian/pesanan/detail";
+import TambahPesanan from "./pages/pembelian/pesanan/tambah";
 import JatuhTempo from "./pages/pembelian/laporan/jatuhTempo";
+import Tagihan from "./pages/pembelian/tagihan/index";
+import TambahTagihan from "./pages/pembelian/tagihan/tambah";
+
+
+
+// =================> Penjualan 
+
+import LaporanPenjualan from "./pages/penjualan/laporan/laporan";
+
+import PesananPenjualan from "./pages/penjualan/pesanan/index";
+import DetailPesananPenjualan from "./pages/penjualan/pesanan/detail";
+import TambahPesananPenjualan from "./pages/penjualan/pesanan/tambah";
+
+import TagihanPenjualan from "./pages/penjualan/tagihan";
+import DetailTagihanPenjualan from "./pages/penjualan/tagihan/detail";
+import TambahTagihanPenjualan from "./pages/penjualan/tagihan/tambah";
+import PengirimanPenjualan from "./pages/penjualan/pengiriman";
 
 function App() {
   return (
@@ -52,21 +64,40 @@ function App() {
               <Route path='pesanan' >
                 <Route index element={<Pesanan/>} />
                 <Route path='detail/:id' element={<DetailPesanan/>} />
+                <Route path='tambah' element={<TambahPesanan/>} />
+              </Route>
+              <Route path='tagihan' >
+                <Route index element={<Tagihan/>} />
+                <Route path='detail/:id' element={<DetailTagihan/>} />
+                <Route path='tambah' element={<TambahTagihan/>} />
               </Route>
             </Route>
-            {/* <Route path='pembelian/laporan' element={<Laporan/>} />
-            <Route path='pembelian/pesanan' element={<Pesanan/>} />
-            <Route path='pembelian/pesanan/detail/:id' element={<DetailPesanan/>} />
-            <Route path='pembelian/pesanan/tambah' element={<TambahPesanan/>} />
-            <Route path='pembelian/tagihan' element={<Tagihan/>} />
-            <Route path='pembelian/tagihan/detail/:id' element={<DetailTagihan/>} /> */}
-            <Route path='penjualan' element={<IndexPembelian/>} >
-              <Route path="laporan" element={<LaporanPenjualan/>} />
+            {/* <Route path='penjualan' element={<IndexPembelian/>} > */}
+            <Route path='penjualan' >
+              <Route path='laporan' >
+                <Route index element={<LaporanPenjualan/>}/>
+                <Route path='menunggu-pembayaran' element={<MenungguPembayaran/>}/>
+                <Route path='jatuh-tempo' element={<JatuhTempo/>}/>
+              </Route>
+              <Route path="pesanan" >
+                <Route index element={<PesananPenjualan/>}/>
+                <Route path="detail/:status" element={<DetailPesananPenjualan/>}/>
+                <Route path="tambah" element={<TambahPesananPenjualan/>}/>
+              </Route>
+              <Route path='tagihan' >
+                <Route index element={<TagihanPenjualan/>} />
+                <Route path='detail/:id' element={<DetailTagihanPenjualan/>} />
+                <Route path='tambah' element={<TambahTagihanPenjualan/>} />
+              </Route>
+              <Route path="pengiriman" >
+                <Route index element={<PengirimanPenjualan/>} />
+              </Route>
+              {/* <Route path="laporan" element={<LaporanPenjualan/>} />
               <Route path="pesanan" element={<PesananPenjualan/>} />
               <Route path="pesanan/tambah" element={<TambahPesananPenjualan/>} />
               <Route path='pesanan/detail/:id' element={<DetailPesananPenjualan/>}  />
               <Route path='tagihan' element={<TagihanPenjualan/>} />
-              <Route path='tagihan/detail/:id' element={<DetailTagihanPenjualan/>} />
+              <Route path='tagihan/detail/:id' element={<DetailTagihanPenjualan/>} /> */}
             </Route>
             <Route path='entity' element={<IndexEntity/>} >
               <Route path='karyawan' element={<KarywanEntity/>} />

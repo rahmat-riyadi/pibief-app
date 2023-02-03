@@ -1,7 +1,5 @@
-import { PictureAsPdf } from '@mui/icons-material'
 import { 
   Box,
-  Button,
   Grid,
   Stack,
   Table,
@@ -11,10 +9,11 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Divider
 } from '@mui/material'
-import React from 'react'
-import BreadCrumbsNav from '../../components/BreadCrumbs'
+import React, { useState } from 'react'
+import BreadCrumbsNav from '../../../components/BreadCrumbs'
+import DetailVendorDialog from '../../../components/DetailVendorDialog'
+import { PrintButton } from '../../../components/PrintButton'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -29,7 +28,51 @@ const tableDataStyle = {
 	py: 2
 }
 
-const FirstRow = () => {
+const stackProps = {
+  direction: 'row',
+  sx: {  width: '400px', borderBottom: '1px solid #EAEAEA', py: 1.5 }
+}
+
+const textRightProps = {
+  textAlign:'right',
+  sx:{
+    fontSize: "14px",
+    fontWeight: 600,
+    flex: 1
+  }
+}
+
+const textLeftProps = {
+  variant:"body1",
+  textAlign:'right',
+  sx:{ fontSize: "14px", fontWeight: 600, pr: 2, flex: 1 }
+}
+
+const ModalRow = props => {
+
+  const titleStyle = { fontSize: "16px", fontWeight: "500", flex: 1 }
+  const textStyle = { fontSize: "13px", color: '#121215', fontWeight: "300", mt: 0.5 }
+
+  return(
+   <Stack direction='row' mb={2} >
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title1}
+        <Typography sx={textStyle} >
+          {props.text1}
+        </Typography>
+      </Typography>
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title2}
+        <Typography sx={textStyle} >
+          {props.text2}
+        </Typography>
+      </Typography>
+   </Stack> 
+  )
+
+}
+
+const FirstRow = (props) => {
   return (
     <Grid container>
       <Grid item md={3}>
@@ -44,9 +87,14 @@ const FirstRow = () => {
               color: "secondary.main",
               fontWeight: "600",
               mt: 1,
+              '&:hover ': {
+                cursor: 'pointer'
+              }
             }}
           >
-            PT. Khinta Permai
+            <span onClick={props.onClick} >
+              PT. Khinta Permai
+            </span>
           </Typography>
         </Typography>
       </Grid>
@@ -146,8 +194,9 @@ const SecondRow = () => {
   )
 }
 
-const DetailTagihan = ({status  = 'Selesai'}) => {
+const DetailTagihanPenjualan = ({status  = 'Selesai'}) => {
 
+  const [showVendorModal, setShowVendorModal] = useState(false)
 
   let tableData = [
 		{
@@ -193,18 +242,10 @@ const DetailTagihan = ({status  = 'Selesai'}) => {
               {status}
             </Typography>
           </Box>
-          <Button 
-            variant='contained' 
-            disableElevation
-            color='secondary'
-            startIcon={ <PictureAsPdf/> } 
-            sx={{ textTransform: 'capitalize', color: '#FFF', my: 2.5, mr: 2.5 }} 
-          >
-            Cetak SP
-          </Button>
+          <PrintButton/>
         </Stack> 
         <Box sx={{ p: 2.5 }} >
-          <FirstRow/>
+          <FirstRow onClick={() => setShowVendorModal(true) } />
           <SecondRow/>
           <ThirdRow/>
           <TableContainer sx={{ mt: 3 }} >
@@ -264,99 +305,67 @@ const DetailTagihan = ({status  = 'Selesai'}) => {
             </Table>
           </TableContainer>
           <Stack alignItems="flex-end" direction="column" sx={{ mt: 2 }}>
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
-            >
-              SubTotal
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  ml: 10,
-                  display: "inline",
-                }}
-              >
+            <Stack direction='row' sx={{ width: '400px', borderBottom: '1px solid #EAEAEA', py: 1 }} >
+              <Typography {...textLeftProps} >
+                SubTotal
+              </Typography>
+              <Typography {...textRightProps} >
                 Rp. 350.000
               </Typography>
-            </Typography>
-            <Divider
-              sx={{
-                minWidth: "400px",
-                width: "250px",
-                bgcolor: "#EAEAEA",
-                my: 2,
-              }}
-            />
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
-            >
-              PPN
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  ml: 10,
-                  display: "inline",
-                }}
-              >
+            </Stack>
+            <Stack {...stackProps} >
+              <Typography {...textLeftProps} >
+                PPN
+              </Typography>
+              <Typography {...textRightProps} >
                 Rp. 72.000
               </Typography>
-            </Typography>
-            <Divider
-              sx={{
-                minWidth: "400px",
-                width: "250px",
-                bgcolor: "#EAEAEA",
-                my: 2,
-              }}
-            />
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "16px", fontWeight: 600, pr: 2 }}
-            >
-              Total
-              <Typography
-                sx={{
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  ml: 10,
-                  display: "inline",
-                }}
-              >
+            </Stack>
+            <Stack {...stackProps} >
+              <Typography {...textLeftProps} >
+                Total
+              </Typography>
+              <Typography {...textRightProps} >
                 Rp. 650.000
               </Typography>
-            </Typography>
-            <Divider
-              sx={{
-                minWidth: "400px",
-                width: "250px",
-                bgcolor: "#EAEAEA",
-                my: 2,
-              }}
-            />
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "18px", fontWeight: 600, pr: 2 }}
-            >
-              Sisa Tagihan
-              <Typography
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  ml: 10,
-                  display: "inline",
-                }}
-              >
-                Rp. 0
-              </Typography>
-            </Typography>
+            </Stack>
           </Stack>
         </Box>
       </Box>
+      <DetailVendorDialog
+        open={showVendorModal}
+        onClose={ () => setShowVendorModal(false) }
+        onClick={ () => setShowVendorModal(false) }
+      >
+        <ModalRow 
+          title1='Nama Perusahaan'
+          text1='PT. Khinta'
+          title2='Email'
+          text2='khinta@gmail.com'
+        />
+        <ModalRow 
+          title1='No. Telepon'
+          text1='087819582058'
+        />
+        <ModalRow 
+          title1='Provinsi'
+          text1='Sulawesi Selatan'
+          title2='Kab/Kota'
+          text2='Makassar'
+        />
+        <ModalRow 
+          title1='Kecamatan'
+          text1='Manggala'
+          title2='Kelurahan'
+          text2='Borong'
+        />
+        <ModalRow 
+          title1='Detail Alamat'
+          text1='Jln Kenangan No. 12'
+        />
+      </DetailVendorDialog>
     </Box>
   )
 }
 
-export default DetailTagihan
+export default DetailTagihanPenjualan

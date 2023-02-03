@@ -1,6 +1,5 @@
 import { 
   Box,
-  Button,
   Grid,
   Stack,
   Table,
@@ -10,17 +9,12 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Divider,
+  Divider
 } from '@mui/material'
-import React from 'react'
-import BreadCrumbsNav from '../../components/BreadCrumbs'
-import NotifDialog from '../../components/NotifDialog'
-import { useDispatch } from 'react-redux'
-import { changeStatus } from '../../reducer/notifDialogSlice'
-import DetailVendorDialog from '../../components/DetailVendorDialog'
-import { PrintButton } from '../../components/PrintButton'
-import ReturnSvg from '../../assets/icons/return.svg'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import BreadCrumbsNav from '../../../components/BreadCrumbs'
+import DetailVendorDialog from '../../../components/DetailVendorDialog'
+import { PrintButton } from '../../../components/PrintButton'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -74,7 +68,7 @@ const FirstRow = (props) => {
               color: "secondary.main",
               fontWeight: "600",
               mt: 1,
-              '&:hover': {
+              '&:hover ': {
                 cursor: 'pointer'
               }
             }}
@@ -101,9 +95,9 @@ const FirstRow = (props) => {
           variant="body1"
           sx={{ fontSize: "12px", fontWeight: "300", mx: 8 }}
         >
-          Apoteker PJ
+          Nomor Order
           <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            St. Chadijah S. Farm
+            P/01
           </Typography>
         </Typography>
       </Grid>
@@ -181,9 +175,7 @@ const SecondRow = () => {
   )
 }
 
-const DetailPesanan = ({status  = 'Selesai'}) => {
-
-  const dispatch = useDispatch()
+const DetailTagihan = ({status  = 'Selesai'}) => {
 
   const [showVendorModal, setShowVendorModal] = useState(false)
 
@@ -208,26 +200,16 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
 		}
 	]
 
-  const handleClick = () => {
-
-    dispatch(changeStatus(true))
-
-    setTimeout(() => {
-      dispatch(changeStatus(false))
-    }, 2000)
-
-  }
-
   return (
     <Box>
       <BreadCrumbsNav/>
       <Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
-				Detail Pesanan
+				Detail Tagihan
 			</Typography>
       <Box sx={{ border: '1px solid #EAEAEA' }} >
         <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #EAEAEA' }} >
           <Box 
-            sx={{
+            sx={{ 
               width: 'fit-content', 
               p: '6px 8px', 
               bgcolor: status === 'Selesai' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
@@ -241,26 +223,10 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
               {status}
             </Typography>
           </Box>
-          <Box flex={1} />
-          <Button 
-            variant='contained' 
-            disableElevation
-            startIcon={ <img src={ReturnSvg} alt="icn" /> } 
-            sx={{ 
-              textTransform: 'capitalize', 
-              color: '#FFF', 
-              my: 2.5, 
-              mr: 2.5 ,
-              bgcolor: '#F9A11B',
-              px: 3
-            }} 
-            >
-            Return
-        </Button>
-          <PrintButton disable={true} />
+          <PrintButton/>
         </Stack> 
         <Box sx={{ p: 2.5 }} >
-          <FirstRow onClick={() => setShowVendorModal(true)} />
+          <FirstRow onClick={() => setShowVendorModal(true) } />
           <SecondRow/>
           <ThirdRow/>
           <TableContainer sx={{ mt: 3 }} >
@@ -346,6 +312,30 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
             />
             <Typography
               variant="body1"
+              sx={{ fontSize: "14px", fontWeight: 600, pr: 2 }}
+            >
+              PPN
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
+              >
+                Rp. 72.000
+              </Typography>
+            </Typography>
+            <Divider
+              sx={{
+                minWidth: "400px",
+                width: "250px",
+                bgcolor: "#EAEAEA",
+                my: 2,
+              }}
+            />
+            <Typography
+              variant="body1"
               sx={{ fontSize: "16px", fontWeight: 600, pr: 2 }}
             >
               Total
@@ -368,25 +358,25 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
                 my: 2,
               }}
             />
-            <Box sx={{ minWidth: "400px", width: "250px" }}>
-              <Button
-                disableElevation
-                fullWidth
-                variant="contained"
-                color="secondary"
-                sx={{ textTransform: "capitalize", color: "#FFF" }}
-                onClick={handleClick}
+            <Typography
+              variant="body1"
+              sx={{ fontSize: "18px", fontWeight: 600, pr: 2 }}
+            >
+              Sisa Tagihan
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  ml: 10,
+                  display: "inline",
+                }}
               >
-                Verifikasi
-              </Button>
-            </Box>
+                Rp. 0
+              </Typography>
+            </Typography>
           </Stack>
         </Box>
       </Box>
-      <NotifDialog
-        message='Data Anda Telah Diverifikasi'
-        status={true}
-      />
       <DetailVendorDialog
         open={showVendorModal}
         onClose={ () => setShowVendorModal(false) }
@@ -423,4 +413,4 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
   )
 }
 
-export default DetailPesanan
+export default DetailTagihan

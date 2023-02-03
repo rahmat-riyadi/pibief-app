@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Stack,
   TableCell,
   TableContainer,
@@ -10,10 +9,13 @@ import {
   Table,
   TableBody,
 } from "@mui/material";
+import BreadCrumbsNav from "../../../components/BreadCrumbs";
 import { useNavigate } from "react-router-dom";
-import NotifDialog from "../../components/NotifDialog";
-import { useDispatch } from "react-redux";
-import { changeStatus } from "../../reducer/notifDialogSlice";
+import NotifDialog from "../../../components/NotifDialog";
+import { FilterBox } from "../../../components/FilterBox";
+import { AddButton } from "../../../components/AddButton";
+import { TableButton } from "../../../components/TableButton";
+import { useState } from "react";
 
 const tableHeadStyle = {
   border: "none",
@@ -49,8 +51,9 @@ const TableStatus = ({ status }) => {
   );
 };
 
-const TagihanPenjualan = () => {
-  const dispatch = useDispatch();
+const Tagihan = () => {
+
+  const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate();
 
   let tableData = [
@@ -80,19 +83,18 @@ const TagihanPenjualan = () => {
 
   return (
     <Box>
-      <Typography
-        variant="h5"
-        sx={{ my: "20px", fontSize: 21, fontWeight: 600 }}
-      >
-        Tagihan
-      </Typography>
-      <Typography
-        variant="body1"
-        sx={{ fontWeight: "300", fontSize: 12, mb: 2 }}
-      >
-        Tampilkan 10 Pesanan
-      </Typography>
-      <TableContainer sx={{}}>
+      <BreadCrumbsNav />
+      <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mb: 2 }}  >
+				<Typography variant='h5' sx={{ my: 2, fontSize: 21, fontWeight: 600 }} >
+					Tagihan
+				</Typography>
+				<AddButton
+					title='Tambah Tagihan'
+					onClick={ () => navigate('tambah') }
+				/>
+			</Stack>
+      <FilterBox/>
+      <TableContainer >
         <Table>
           <TableHead>
             <TableRow>
@@ -148,7 +150,7 @@ const TagihanPenjualan = () => {
           </TableHead>
           <TableBody>
             {tableData.map((e, i) => (
-              <TableRow hover>
+              <TableRow key={i} hover>
                 <TableCell
                   padding="none"
                   sx={{ ...tableDataStyle, pl: 2, color: "#121215" }}
@@ -201,34 +203,17 @@ const TagihanPenjualan = () => {
                   {e.total}
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      style={{
-                        p: "8px",
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                      }}
-                      onClick={() => navigate(`/penjualan/tagihan/detail/${i}`)}
-                    >
-                      Lihat
-                    </Button>
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      style={{
-                        p: "8px",
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                      }}
-                      onClick={() => dispatch(changeStatus(true))}
-                    >
-                      Hapus
-                    </Button>
-                  </Stack>
+                <Stack direction='row' justifyContent='space-between' columnGap={1} >
+										<TableButton
+											title='Lihat'
+											onClick={() => navigate('detail/1')}
+										/>
+										<TableButton
+											title='Hapus'
+											type='delete'
+                      onClick={() => setShowModal(true)}
+										/>
+									</Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -236,12 +221,16 @@ const TagihanPenjualan = () => {
         </Table>
       </TableContainer>
       <NotifDialog
-        message="Apakah anda ingin menghapus data?"
-        status={false}
-        onAcceptText="Ya, hapus"
-      />
+				show={showModal}
+				message="Apakah anda ingin menghapus data?"
+				status={false}
+				onAcceptText="Ya, hapus"
+				onCancelText='Batal'
+				onAccept={() => setShowModal(false)} 
+				onCancel={() => setShowModal(false)} 
+			/>
     </Box>
   );
 };
 
-export default TagihanPenjualan;
+export default Tagihan;

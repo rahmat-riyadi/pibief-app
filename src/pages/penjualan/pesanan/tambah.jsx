@@ -445,16 +445,31 @@ import {
               </Typography>
             </Stack>
             <Divider sx={{ bgcolor: "#EAEAEA", my: "13px" }} />
-            <Button
-              variant="contained"
-              fullWidth
-              sx={{ textTransform: "capitalize", color: "#FFF" }}
-              color="secondary"
-              disableElevation
-              onClick={handleSubmit(onSubmit)}
-            >
-              Simpan & Setujui
-            </Button>
+            <Stack direction='row' columnGap={2} mt={2}>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ 
+                  textTransform: "capitalize", 
+                  bgcolor: 'rgba(5, 165, 225, 0.1)',
+                  color: 'secondary.main'
+                }}
+                disableElevation
+                onClick={handleSubmit(onSubmit)}
+              >
+                Batal
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ textTransform: "capitalize", color: "#FFF" }}
+                color="secondary"
+                disableElevation
+                onClick={handleSubmit(onSubmit)}
+              >
+                Simpan & Setujui
+              </Button>
+            </Stack>
           </Box>
         </Stack>
       </Box>
