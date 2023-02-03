@@ -39,6 +39,9 @@ import TagihanPenjualan from "./pages/penjualan/tagihan";
 import DetailTagihanPenjualan from "./pages/penjualan/tagihan/detail";
 import TambahTagihanPenjualan from "./pages/penjualan/tagihan/tambah";
 import PengirimanPenjualan from "./pages/penjualan/pengiriman";
+import EntryProduk from "./pages/persediaan/entryProduk";
+import TambahEntryProduk from "./pages/persediaan/entryProduk/tambah";
+import DetailEntryProduk from "./pages/persediaan/entryProduk/detail";
 
 function App() {
   return (
@@ -92,12 +95,13 @@ function App() {
               <Route path="pengiriman" >
                 <Route index element={<PengirimanPenjualan/>} />
               </Route>
-              {/* <Route path="laporan" element={<LaporanPenjualan/>} />
-              <Route path="pesanan" element={<PesananPenjualan/>} />
-              <Route path="pesanan/tambah" element={<TambahPesananPenjualan/>} />
-              <Route path='pesanan/detail/:id' element={<DetailPesananPenjualan/>}  />
-              <Route path='tagihan' element={<TagihanPenjualan/>} />
-              <Route path='tagihan/detail/:id' element={<DetailTagihanPenjualan/>} /> */}
+            </Route>
+            <Route path="persediaan" >
+              <Route path="entry-produk">
+                <Route index element={<EntryProduk/>} />
+                <Route path="tambah" element={<TambahEntryProduk/>} />
+                <Route path="detail/:id" element={<DetailEntryProduk/>} />
+              </Route>
             </Route>
             <Route path='entity' element={<IndexEntity/>} >
               <Route path='karyawan' element={<KarywanEntity/>} />

@@ -217,13 +217,13 @@ const Sidebar = () => {
             status={url.includes('persediaan')}
             onClick={() => setShowStok(!showStok)}
           />
-          <Collapse in={showStok} sx={{ pl: 6 }} >
+          <Collapse in={showStok || url.includes('persediaan') } sx={{ pl: 6 }} >
             <List>
               <ListButton 
                 itemText="Entry Produk"
-                icon={<img src={ url.includes('persediaan') && url.includes('entry produk') ? SelectedBox : UnselectedBox } alt="" />} 
-                status={ url.includes('persediaan') && url.includes('entry produk') }
-                onClick={ () => {} }
+                icon={<img src={ url.includes('persediaan') && url.includes('entry-produk') ? SelectedBox : UnselectedBox } alt="" />} 
+                status={ url.includes('persediaan') && url.includes('entry-produk') }
+                onClick={ () => navigate('persediaan/entry-produk') }
               />
               <ListButton 
                 itemText="Stok"
