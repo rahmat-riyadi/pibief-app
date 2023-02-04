@@ -1,4 +1,4 @@
-import { CloseRounded } from "@mui/icons-material";
+import { CloseRounded, KeyboardArrowDownRounded, SearchOutlined } from "@mui/icons-material";
 import { 
 	Box,
 	Typography,
@@ -22,6 +22,12 @@ import {
 	DialogContent
 } from "@mui/material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AddButton } from "../../../components/AddButton";
+import BreadCrumbsNav from "../../../components/BreadCrumbs";
+import NotifDialog from "../../../components/NotifDialog";
+import { TableButton } from "../../../components/TableButton";
+import DetailVendorDialog from '../../../components/DetailVendorDialog'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -63,21 +69,64 @@ const DialogRow = ({ label1, text1, label2, text2 }) => {
   );
 };
 
+const ModalRow = props => {
+
+  const titleStyle = { fontSize: "16px", fontWeight: "500", flex: 1 }
+  const textStyle = { fontSize: "13px", color: '#121215', fontWeight: "300", mt: 0.5 }
+
+  return(
+   <Stack direction='row' mb={2} >
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title1}
+        <Typography sx={textStyle} >
+          {props.text1}
+        </Typography>
+      </Typography>
+      <Typography variant="body1" sx={titleStyle} >
+        {props.title2}
+        <Typography sx={textStyle} >
+          {props.text2}
+        </Typography>
+      </Typography>
+   </Stack> 
+  )
+
+}
+
 const CustomLabel = ({ label, target }) => {
 	return(
 		<InputLabel 
 			htmlFor={target} 
-			sx={{ fontWeight: 300, color: '#000', mb: 1 }}
+			sx={{ fontWeight: 300, color: 'greyFont.main', mb: 1 }}
 		>
 			{label}
 		</InputLabel>
 	)
 }
 
+const SectionTitle = ({ title }) => {
+	return(
+			<Typography
+					sx={{ 
+							borderLeft: '3px solid #05A5E1',
+							pl: 1.5,
+							fontWeight: 600,
+							mb: 1.8
+					}}
+			>
+					{title}
+			</Typography>
+	)
+}
+
 const VendorEntity = () => {
 
 	const [openDrawer, setOpenDrawer] = useState(false)
+	const [deleteModal, setDeleteModal] = useState(false)
+	const [showVendorModal, setShowVendorModal] = useState(false)
 	const [detailDialog, setDetailDialog] = useState(false)
+
+	const navigate = useNavigate()
 
 	let tableData = [
 		{
@@ -103,31 +152,40 @@ const VendorEntity = () => {
 
   return (
 		<Box>
-			<Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
-        Vendor
-      </Typography>
+			<BreadCrumbsNav/>
 			<Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 2 }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: "300", fontSize: 12 }}>
-          Tampilkan 10 Vendor
-        </Typography>
-        <Button
-          variant="contained"
-          disableElevation
-          color="secondary"
-          sx={{
-            width: "fit-content",
-            color: "#fff",
-            textTransform: "capitalize",
-          }}
-          onClick={() => setOpenDrawer(true)}
-        >
-          Tambah Vendor
-        </Button>
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				sx={{ mb: 2 }}
+			>
+        <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
+					Vendor
+				</Typography>
+        <AddButton 
+					title='Tambah Vendor'
+					onClick={() => navigate('tambah')}
+				/>
+			</Stack>
+			<Stack alignItems='center' direction='row' mb={2} >
+				<InputBase 
+					startAdornment={<SearchOutlined sx={{ mr: 1 }} />}
+					sx={{ border: '1px solid #A6A8AE', py: .2, px: 1.5, borderRadius: '5px', width: '250px' }}
+					placeholder='Cari Data'
+				/>
+				<Box flex={1} />
+				<Typography variant='body1' sx={{ fontWeight: 300, color: 'greyFont.main', mr: 1 }} >
+					Filter
+				</Typography>
+				<Button 
+					variant='outlined' 
+					color='secondary'
+					endIcon={<KeyboardArrowDownRounded/>}
+					size='small'
+					sx={{ textTransform: 'none' }}
+				>
+					Semua
+				</Button>
 			</Stack>
 			<TableContainer  >
 				<Table>
@@ -158,7 +216,7 @@ const VendorEntity = () => {
 					</TableHead>
 					<TableBody>
 						{tableData.map((e,i) => (
-							<TableRow id={i} hover >
+							<TableRow key={i} id={i} hover >
 								<TableCell padding='none'  sx={{ ...tableDataStyle, pl: 2, color: '#121215', width: '10px' }} >
 									{i+1}
 								</TableCell>
@@ -178,19 +236,16 @@ const VendorEntity = () => {
 									{e.email}
 								</TableCell>
 								<TableCell padding ='none' sx={{ pr: 2 }}  >
-									<Stack direction='row' justifyContent='space-between' >
-										<Button color='greyFont' variant='outlined' size='small' sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }} onClick={() => setDetailDialog(true)}   >
-											Lihat
-										</Button>
-										<Button 
-											color='greyFont' 
-											variant='outlined' 
-											size='small' 
-											sx={{ textTransform: 'capitalize', fontSize: '12px', p: '4px 8px' }}   
-											// onClick={() => dispatch(changeStatus(true))}
-										>
-											Hapus
-										</Button>
+									<Stack direction='row' justifyContent='space-between' columnGap={1} >
+										<TableButton
+											title='Lihat'
+											onClick={() => setShowVendorModal(true)}
+										/>
+										<TableButton
+											title='Hapus'
+											type='delete'
+											onClick={() => setDeleteModal(true)}
+										/>
 									</Stack>
 								</TableCell>
 							</TableRow>
@@ -351,6 +406,61 @@ const VendorEntity = () => {
 					</Stack>
 				</DialogContent>
 			</Dialog>
+			<NotifDialog
+				show={deleteModal}
+				message="Apakah anda ingin menghapus data?"
+				status='warning'
+				onAcceptText="Ya, hapus"
+				onCancelText='Batal'
+				onAccept={() => setDeleteModal(false)} 
+				onCancel={() => setDeleteModal(false)} 
+			/>
+			<DetailVendorDialog
+				open={showVendorModal}
+				onClick={() => setShowVendorModal(false)}
+				onClose={() => setShowVendorModal(false)}
+			>
+				<SectionTitle title='Data Identitas' />
+				<ModalRow 
+          title1='Nama Cabang'
+          text1='PT. Khinta'
+          title2='Email'
+          text2='khinta@gmail.com'
+        />
+				<ModalRow 
+          title1='No. Telepon'
+          text1='087818181'
+          title2='No. Whatsapp'
+          text2='09866732'
+        />
+				<ModalRow 
+          title1='Tanggal Terbentuk'
+          text1='17-11-2023'
+        />
+				<Box mt={3} />
+				<SectionTitle title='Data Alamat' />
+				<ModalRow 
+          title1='Provinsi'
+          text1='Sulawesi Selatan'
+          title2='Kab/Kota'
+          text2='Sinjai'
+        />
+				<ModalRow 
+          title1='Kecamatan'
+          text1='Mamajang'
+          title2='Kelurahan'
+          text2='Maricaya Selatan'
+        />
+				<ModalRow 
+          title1='Detail Alamat'
+          text1='Jln. Kenangan no 13'
+        />
+				<Button
+					sx={{ bgcolor: '#FAB449', textTransform: 'none', fontSize: '12px', color: '#fff', px: 5 }}
+				>
+					Edit
+				</Button>
+			</DetailVendorDialog>
 		</Box>
 	)
 };

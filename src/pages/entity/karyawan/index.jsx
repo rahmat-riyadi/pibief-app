@@ -1,4 +1,4 @@
-import { CloseRounded } from "@mui/icons-material";
+import { CloseRounded, KeyboardArrowDownRounded, SearchOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -14,12 +14,14 @@ import {
   IconButton,
   DialogTitle,
   DialogContent,
+  InputBase,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { changeStatus } from "../../reducer/notifDialogSlice";
-import { useDispatch } from "react-redux";
-import NotifDialog from "../../components/NotifDialog";
+import NotifDialog from "../../../components/NotifDialog";
+import { TableButton } from "../../../components/TableButton";
+import { AddButton } from "../../../components/AddButton";
+import BreadCrumbsNav from "../../../components/BreadCrumbs";
 
 const tableHeadStyle = {
   border: "none",
@@ -72,12 +74,12 @@ const DialogRow = ({ label1, text1, label2, text2 }) => {
   );
 };
 
-const KarywanEntity = () => {
+const KaryawanEntity = () => {
 
-  const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [showKaryawanModal, setShowKaryawanModal] = useState(false)
+  const [deleteModal, setShowDeleteModal] = useState(false)
 
   let tableData = [
     {
@@ -91,32 +93,41 @@ const KarywanEntity = () => {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
-        Karyawan
-      </Typography>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 2 }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: "300", fontSize: 12 }}>
-          Tampilkan 10 Karyawan
-        </Typography>
-        <Button
-          variant="contained"
-          disableElevation
-          color="secondary"
-          sx={{
-            width: "fit-content",
-            color: "#fff",
-            textTransform: "capitalize",
-          }}
-          onClick={() => navigate("/entity/karyawan/tambah")}
-        >
-          Tambah Karyawan
-        </Button>
-      </Stack>
+      <BreadCrumbsNav/>
+			<Stack
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				sx={{ mb: 2 }}
+			>
+        <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
+					Cabang
+				</Typography>
+        <AddButton 
+					title='Tambah Karyawan'
+					onClick={() => navigate('tambah')}
+				/>
+			</Stack>
+			<Stack alignItems='center' direction='row' mb={2} >
+        <Typography variant='body1' sx={{ fontWeight: 300, color: 'greyFont.main', mr: 1 }} >
+					Filter
+				</Typography>
+				<Button 
+					variant='outlined' 
+					color='secondary'
+					endIcon={<KeyboardArrowDownRounded/>}
+					size='small'
+					sx={{ textTransform: 'none' }}
+				>
+					Semua
+				</Button>
+        <Box flex={1} />
+				<InputBase 
+					startAdornment={<SearchOutlined sx={{ mr: 1 }} />}
+					sx={{ border: '1px solid #A6A8AE', py: .2, px: 1.5, borderRadius: '5px', width: '250px' }}
+					placeholder='Cari Data'
+				/>
+			</Stack>
       <TableContainer>
         <Table>
           <TableHead>
@@ -212,34 +223,17 @@ const KarywanEntity = () => {
                   {e.phone}
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px",
-                      }}
-                      onClick={() => setOpenDrawer(true)}
-                    >
-                      Lihat
-                    </Button>
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px",
-                      }}
-                      onClick={() => dispatch(changeStatus(true))}
-                    >
-                      Hapus
-                    </Button>
-                  </Stack>
+                  <Stack direction='row' justifyContent='space-between' columnGap={1} >
+										<TableButton
+											title='Lihat'
+											onClick={() => setShowKaryawanModal(true)}
+										/>
+										<TableButton
+											title='Hapus'
+											type='delete'
+											onClick={() => setShowDeleteModal(true)}
+										/>
+									</Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -247,7 +241,7 @@ const KarywanEntity = () => {
         </Table>
       </TableContainer>
       <Dialog
-        open={openDrawer}
+        open={showKaryawanModal}
         scroll="paper"
         PaperProps={{ sx: { width: "860px", maxWidth: "unset" } }}
       >
@@ -262,7 +256,7 @@ const KarywanEntity = () => {
           <Typography variant="body1" sx={{ fontWeight: "600" }}>
             Detail Karyawan
           </Typography>
-          <IconButton onClick={ () => setOpenDrawer(false)} >
+          <IconButton onClick={ () => setShowKaryawanModal(false)} >
             <CloseRounded />
           </IconButton>
         </DialogTitle>
@@ -375,12 +369,16 @@ const KarywanEntity = () => {
         </DialogContent>
       </Dialog>
       <NotifDialog
-        status={false}
-        message="Apakah anda ingin menghapus data?"
-        onAcceptText="Ya, hapus"
-      />
+				show={deleteModal}
+				message="Apakah anda ingin menghapus data?"
+				status='warning'
+				onAcceptText="Ya, hapus"
+				onCancelText='Batal'
+				onAccept={() => setShowDeleteModal(false)} 
+				onCancel={() => setShowDeleteModal(false)} 
+			/>
     </Box>
   );
 };
 
-export default KarywanEntity;
+export default KaryawanEntity;

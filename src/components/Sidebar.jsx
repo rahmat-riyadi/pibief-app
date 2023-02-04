@@ -245,7 +245,7 @@ const Sidebar = () => {
             status={url.includes('entity')}
             onClick={() => setShowEntity(!showEntity)}
           />
-          <Collapse in={showEntity} sx={{ pl: 6 }} >
+          <Collapse in={showEntity || url.includes('entity')} sx={{ pl: 6 }} >
             <List>
               <ListButton 
                 itemText="Vendor"

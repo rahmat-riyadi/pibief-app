@@ -3,12 +3,6 @@ import ForgotPassword from "./components/ForgotPassword";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import AppLayout from "./layout/appLayout";
-import IndexEntity from "./pages/entity";
-import CabangEntity from "./pages/entity/cabang";
-import KarywanEntity from "./pages/entity/karyawan";
-import TambahCabang from "./pages/entity/tambahCabang";
-import TambahKaryawan from "./pages/entity/tambahKaryawan";
-import VendorEntity from "./pages/entity/vendor";
 import Index from "./pages/home";
 import LoginPage from "./pages/login";
 import Laporan from "./pages/pembelian/laporan/laporan";
@@ -39,12 +33,25 @@ import TagihanPenjualan from "./pages/penjualan/tagihan";
 import DetailTagihanPenjualan from "./pages/penjualan/tagihan/detail";
 import TambahTagihanPenjualan from "./pages/penjualan/tagihan/tambah";
 import PengirimanPenjualan from "./pages/penjualan/pengiriman";
+
+// =================> Penjualan 
+
 import EntryProduk from "./pages/persediaan/entryProduk";
 import TambahEntryProduk from "./pages/persediaan/entryProduk/tambah";
 import DetailEntryProduk from "./pages/persediaan/entryProduk/detail";
 import StokPersedian from "./pages/persediaan/stok";
 import DetailStok from "./pages/persediaan/stok/detail";
 import TambahStok from "./pages/persediaan/stok/tambah";
+
+// =================> Entity 
+
+import VendorEntity from "./pages/entity/vendor";
+
+import CabangEntity from "./pages/entity/cabang";
+import TambahCabang from "./pages/entity/cabang/tambah";
+import TambahKaryawan from "./pages/entity/karyawan/tambah";
+import TambahVendor from "./pages/entity/vendor/tambah";
+import KaryawanEntity from "./pages/entity/karyawan";
 
 function App() {
   return (
@@ -111,12 +118,22 @@ function App() {
               <Route path="tambah" element={<TambahStok/>} />
               </Route>
             </Route>
-            <Route path='entity' element={<IndexEntity/>} >
-              <Route path='karyawan' element={<KarywanEntity/>} />
-              <Route path='karyawan/tambah' element={<TambahKaryawan/>} />
-              <Route path='cabang' element={<CabangEntity/>} />
-              <Route path='cabang/tambah' element={<TambahCabang/>} />
-              <Route path='vendor' element={<VendorEntity/>} />
+            <Route path='entity' >
+              <Route path='vendor' >
+                <Route index element={<VendorEntity/>} />
+                <Route path='tambah' element={<TambahVendor/>} />
+              </Route>
+              <Route path='cabang' >
+                <Route index element={<CabangEntity/>} />
+                <Route path='tambah' element={<TambahCabang/>} />
+              </Route>
+              <Route path='karyawan' >
+                <Route index element={<KaryawanEntity/>} />
+                <Route path='tambah' element={<TambahKaryawan/>} />
+              </Route>
+              {/* <Route path='cabang' element={<CabangEntity/>} />
+              <Route path='cabang/tambah' element={<TambahCabang/>} /> */}
+              
             </Route>
         </Route>
       </Routes>

@@ -244,11 +244,11 @@ const TambahKaryawan = () => {
 					<InputBase id='twitter' sx={baseInputStyle} />
 				</FormGroup>
 			</Stack>
-			<Stack direction='row' justifyContent='flex-end' sx={{ mt: 2 }} >
+			<Stack direction='row' justifyContent='flex-end' sx={{ mt: 2 }} columnGap={3} >
 				<Button 
 					variant='text' 
 					color='secondary'
-					sx={{ textTransform: 'capitalize', width: '268px' }}
+					sx={{ textTransform: 'capitalize', width: '268px', bgcolor: 'rgba(5, 165, 225, 0.1)' }}
 				>
 					Batal
 				</Button>

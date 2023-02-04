@@ -12,14 +12,16 @@ import {
   Dialog,
   DialogTitle,
   IconButton,
-  DialogContent
+  DialogContent,
+  InputBase
 } from "@mui/material";
 import { useState } from "react";
-import { CloseRounded } from "@mui/icons-material";
+import { CloseRounded, KeyboardArrowDownRounded, SearchOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { changeStatus } from "../../reducer/notifDialogSlice";
-import { useDispatch } from "react-redux";
-import NotifDialog from "../../components/NotifDialog";
+import NotifDialog from "../../../components/NotifDialog";
+import BreadCrumbsNav from "../../../components/BreadCrumbs";
+import { AddButton } from "../../../components/AddButton";
+import { TableButton } from "../../../components/TableButton";
 
 const tableHeadStyle = {
   border: "none",
@@ -74,10 +76,10 @@ const DialogRow = ({ label1, text1, label2, text2 }) => {
 
 const CabangEntity = () => {
 
-  const dispatch = useDispatch()
 	const navigate = useNavigate()
 
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
+  const [cabangModal, setCabangModal] = useState(false)
 
   let tableData = [
     {
@@ -91,32 +93,41 @@ const CabangEntity = () => {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
-        Cabang
-      </Typography>
+      <BreadCrumbsNav/>
 			<Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 2 }}
-      >
-        <Typography variant="body1" sx={{ fontWeight: "300", fontSize: 12 }}>
-          Tampilkan 10 Cabang
-        </Typography>
-        <Button
-          variant="contained"
-          disableElevation
-          color="secondary"
-          sx={{
-            width: "fit-content",
-            color: "#fff",
-            textTransform: "capitalize",
-          }}
-          onClick={() => navigate("/entity/cabang/tambah")}
-        >
-          Tambah Cabang
-        </Button>
-      </Stack>
+				direction="row"
+				justifyContent="space-between"
+				alignItems="center"
+				sx={{ mb: 2 }}
+			>
+        <Typography variant="h5" sx={{ my: 2, fontSize: 21, fontWeight: 600 }}>
+					Cabang
+				</Typography>
+        <AddButton 
+					title='Tambah Cabang'
+					onClick={() => navigate('tambah')}
+				/>
+			</Stack>
+			<Stack alignItems='center' direction='row' mb={2} >
+        <Typography variant='body1' sx={{ fontWeight: 300, color: 'greyFont.main', mr: 1 }} >
+					Filter
+				</Typography>
+				<Button 
+					variant='outlined' 
+					color='secondary'
+					endIcon={<KeyboardArrowDownRounded/>}
+					size='small'
+					sx={{ textTransform: 'none' }}
+				>
+					Semua
+				</Button>
+        <Box flex={1} />
+				<InputBase 
+					startAdornment={<SearchOutlined sx={{ mr: 1 }} />}
+					sx={{ border: '1px solid #A6A8AE', py: .2, px: 1.5, borderRadius: '5px', width: '250px' }}
+					placeholder='Cari Data'
+				/>
+			</Stack>
       <TableContainer>
         <Table>
           <TableHead>
@@ -209,34 +220,17 @@ const CabangEntity = () => {
                   {e.email}
                 </TableCell>
                 <TableCell padding="none" sx={{ pr: 2 }}>
-                  <Stack direction="row" justifyContent="space-between">
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px",
-                      }}
-                      onClick={() => setOpenDrawer(true)}
-                    >
-                      Lihat
-                    </Button>
-                    <Button
-                      color="greyFont"
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        textTransform: "capitalize",
-                        fontSize: "12px",
-                        p: "4px 8px",
-                      }}
-                      onClick={() => dispatch(changeStatus(true))}
-                    >
-                      Hapus
-                    </Button>
-                  </Stack>
+                  <Stack direction='row' justifyContent='space-between' columnGap={1} >
+										<TableButton
+											title='Lihat'
+											onClick={() => setCabangModal(true)}
+										/>
+										<TableButton
+											title='Hapus'
+											type='delete'
+											onClick={() => setDeleteModal(true)}
+										/>
+									</Stack>
                 </TableCell>
               </TableRow>
             ))}
@@ -244,7 +238,7 @@ const CabangEntity = () => {
         </Table>
       </TableContainer>
       <Dialog
-        open={openDrawer}
+        open={cabangModal}
         PaperProps={{ sx: { width: "860px", maxWidth: "unset" } }}
       >
         <DialogTitle
@@ -258,7 +252,7 @@ const CabangEntity = () => {
           <Typography variant="body1" sx={{ fontWeight: "600" }}>
             Detail Cabang
           </Typography>
-          <IconButton onClick={ () => setOpenDrawer(false)} >
+          <IconButton onClick={ () => setCabangModal(false)} >
             <CloseRounded />
           </IconButton>
         </DialogTitle>
@@ -313,10 +307,14 @@ const CabangEntity = () => {
         </DialogContent>
       </Dialog>
       <NotifDialog
-        status={false}
-        message="Apakah anda ingin menghapus data?"
-        onAcceptText="Ya, hapus"
-      />
+				show={deleteModal}
+				message="Apakah anda ingin menghapus data?"
+				status='warning'
+				onAcceptText="Ya, hapus"
+				onCancelText='Batal'
+				onAccept={() => setDeleteModal(false)} 
+				onCancel={() => setDeleteModal(false)} 
+			/>
     </Box>
   );
 };
