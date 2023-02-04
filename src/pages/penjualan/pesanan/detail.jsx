@@ -159,6 +159,7 @@ const DetailPesananPenjualan = () => {
   const { status } = useParams()
 
   const [showDialog, setShowDialog] = useState(false)
+  const [showCancelDialog, setShowCancelDialog] = useState(false)
 
   let tableData = [
 		{
@@ -343,7 +344,7 @@ const DetailPesananPenjualan = () => {
                       bgcolor: '#C92B28'
                     }
                   }}
-                  onClick={handleClick}
+                  onClick={() => setShowCancelDialog(true)}
                 >
                   Tolak
                 </Button>
@@ -368,8 +369,17 @@ const DetailPesananPenjualan = () => {
       </Box>
       <NotifDialog
         message='Data Anda Telah Diverifikasi'
-        status={true}
+        status='success'
         show={showDialog}
+      />
+      <NotifDialog
+        message='Apakah anda yakin menolak pesanan'
+        status='danger'
+        show={showCancelDialog}
+        onAcceptText="Ya, Batal"
+				onCancelText='Lanjut'
+				onAccept={() => setShowCancelDialog(false)} 
+				onCancel={() => setShowCancelDialog(false)} 
       />
     </div>
   );

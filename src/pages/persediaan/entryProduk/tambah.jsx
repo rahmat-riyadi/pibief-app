@@ -7,6 +7,7 @@ import {
 } from "@mui/material"
 import { useRef } from "react"
 import BreadCrumbsNav from "../../../components/BreadCrumbs"
+import NotifDialog from "../../../components/NotifDialog"
 
 const fileInputStyle = {
     display: 'flex',
@@ -51,7 +52,7 @@ const InputLabel = ({ label }) => {
 const TambahEntryProduk = () => {
 
     const fileInputRef = useRef()
-
+    
     return(
         <Box pb={5} >
             <BreadCrumbsNav/>
@@ -124,9 +125,12 @@ const TambahEntryProduk = () => {
                         color: '#fff'
                     }}
                 >
-                    Batal
+                    Tambah
                 </Button>
             </Stack>
+            <NotifDialog
+
+            />
         </Box>
     )
 }

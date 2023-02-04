@@ -10,7 +10,9 @@ import {
 	Stack,
 	InputBase
 } from "@mui/material"
+import { useState } from "react"
 import BreadCrumbsNav from "../../../components/BreadCrumbs"
+import NotifDialog from "../../../components/NotifDialog"
 import { TableButton } from "../../../components/TableButton"
 
 const tableHeadStyle = {
@@ -46,6 +48,8 @@ const TableStatus = ({ status }) =>{
 }
 
 const JatuhTempo = () => {
+
+	const [deleteModal, setDeleteModal] = useState(false)
 
 	let tableData = [
 		{
@@ -144,6 +148,7 @@ const JatuhTempo = () => {
 										<TableButton
 											title='Hapus'
 											type='delete'
+											onClick={() => setDeleteModal(true)}
 										/>
 									</Stack>
 								</TableCell>
@@ -152,6 +157,15 @@ const JatuhTempo = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<NotifDialog
+                show={deleteModal}
+                status='warning'
+                message='Apakah anda ingin menghapus data ?'
+                onCancelText='Batal'
+                onCancel={() => setDeleteModal(false)}
+                onAcceptText='Ya, Hapus'
+                onAccept={() => setDeleteModal(false)}
+            />
 		</Box>
 	)
 

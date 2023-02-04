@@ -223,7 +223,7 @@ const Tagihan = () => {
       <NotifDialog
 				show={showModal}
 				message="Apakah anda ingin menghapus data?"
-				status={false}
+				status='warning'
 				onAcceptText="Ya, hapus"
 				onCancelText='Batal'
 				onAccept={() => setShowModal(false)} 

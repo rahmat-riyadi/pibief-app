@@ -75,10 +75,6 @@ const Pesanan = () => {
 		}
 	]
 
-	for(let i = 0; i < 5; i++){
-		tableData.push(tableData[i % 2])
-	}
-
   return (
     	<Box>
 			<BreadCrumbsNav/>
@@ -164,7 +160,7 @@ const Pesanan = () => {
 			<NotifDialog
 				show={showModal}
 				message="Apakah anda ingin menghapus data?"
-				status={false}
+				status='warning'
 				onAcceptText="Ya, hapus"
 				onCancelText='Batal'
 				onAccept={() => setShowModal(false)} 

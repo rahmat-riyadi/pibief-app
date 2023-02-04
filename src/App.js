@@ -42,6 +42,9 @@ import PengirimanPenjualan from "./pages/penjualan/pengiriman";
 import EntryProduk from "./pages/persediaan/entryProduk";
 import TambahEntryProduk from "./pages/persediaan/entryProduk/tambah";
 import DetailEntryProduk from "./pages/persediaan/entryProduk/detail";
+import StokPersedian from "./pages/persediaan/stok";
+import DetailStok from "./pages/persediaan/stok/detail";
+import TambahStok from "./pages/persediaan/stok/tambah";
 
 function App() {
   return (
@@ -101,6 +104,11 @@ function App() {
                 <Route index element={<EntryProduk/>} />
                 <Route path="tambah" element={<TambahEntryProduk/>} />
                 <Route path="detail/:id" element={<DetailEntryProduk/>} />
+              </Route>
+              <Route path="stok" >
+              <Route index element={<StokPersedian/>} />
+              <Route path="detail/:id" element={<DetailStok/>} />
+              <Route path="tambah" element={<TambahStok/>} />
               </Route>
             </Route>
             <Route path='entity' element={<IndexEntity/>} >

@@ -1,18 +1,19 @@
 import { Dialog, Stack, Typography, Button } from "@mui/material";
 import warning from "../assets/image/warning.svg";
 import success from "../assets/image/done.svg";
+import danger from "../assets/icons/danger.svg";
 const NotifDialog = (props) => {
 
   return (
     <Dialog open={props.show}>
       <Stack sx={{ m: 3, minWidth: '282px' }} direction="column" alignItems="center">
         <img
-          src={props.status ? success : warning}
-          alt={props.status ? success : warning}
+          src={props.status === 'success' ? success : props.status === 'warning' ? warning : danger}
+          alt={props.status === 'success' ? success : props.status === 'warning' ? warning : danger}
           style={{ width: "100px" }}
         />
 				{ 
-					props.status 
+					props.status === 'success'
 					&&
 					<Typography
 						variant="body1"
@@ -22,7 +23,7 @@ const NotifDialog = (props) => {
 					</Typography>
 				}
 				{
-					props.status
+					props.status === 'success'
 					?
 					<Typography
 						variant="body1"
@@ -38,7 +39,7 @@ const NotifDialog = (props) => {
 						{props.message}
 					</Typography>
 				}
-        {!props.status && (
+        {props.status !== 'success' && (
           <Stack
             direction="row"
             justifyContent="space-between"

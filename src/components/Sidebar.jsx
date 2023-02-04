@@ -229,7 +229,7 @@ const Sidebar = () => {
                 itemText="Stok"
                 icon={<img src={ url.includes('persediaan') && url.includes('stok') ? SelectedBox : UnselectedBox } alt="" />} 
                 status={ url.includes('persediaan') && url.includes('stok') }
-                onClick={ () => {} }
+                onClick={ () => navigate('persediaan/stok') }
               />
               <ListButton 
                 itemText="Return"
