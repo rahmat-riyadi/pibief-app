@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import axios from '../helper/axios'
+// import axios from '../helper/axios'
 
 const boxStyle = {
   width: '70%', 
@@ -81,9 +81,9 @@ const ForgotPassword = () => {
   const cekEmail = async (email) => {
 
     
-    const response = await axios.post('/lupa-sandi/email',{
-      email: email
-    })
+    // const response = await axios.post('/lupa-sandi/email',{
+    //   email: email
+    // })
 
     // console.log(response.data)
 
