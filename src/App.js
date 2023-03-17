@@ -62,11 +62,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/registration" element={<Registration/>} />
         </Route>
-        <Route path="/" element={
-          <ProtectedRoute>
-            <AppLayout/>
-          </ProtectedRoute>
-        }>
+        <Route path="/" element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
             <Route index element={<Index/>} />
             <Route path='pembelian'>
               <Route path='laporan'  >
@@ -131,9 +127,6 @@ function App() {
                 <Route index element={<KaryawanEntity/>} />
                 <Route path='tambah' element={<TambahKaryawan/>} />
               </Route>
-              {/* <Route path='cabang' element={<CabangEntity/>} />
-              <Route path='cabang/tambah' element={<TambahCabang/>} /> */}
-              
             </Route>
         </Route>
       </Routes>

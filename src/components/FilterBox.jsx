@@ -1,6 +1,6 @@
 import { Box, InputBase, Typography } from "@mui/material"
 
-export const FilterBox = () => {
+export const FilterBox = ({ filter, setFilter }) => {
     return(
         <Box sx={{ bgcolor: 'primary.main', p: 2, borderRadius: '10px 10px 0 0' }} >
             <Typography 
@@ -17,6 +17,8 @@ export const FilterBox = () => {
                     py: 0.3,
                     borderRadius: '5px'
                 }}
+                value={ filter ?? '' }
+                onChange={ e => setFilter(e.target.value)}
             />
         </Box>
     )
