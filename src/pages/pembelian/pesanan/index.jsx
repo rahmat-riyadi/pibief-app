@@ -112,7 +112,7 @@ const Pesanan = () => {
 				/>
 			</Stack>
 			<FilterBox filter={globalFilter} setFilter={setGlobalFilter} />
-				<TableContainer sx={{ overflowX: 'auto' }}>
+				<TableContainer sx={{ overflowX: 'auto', maxHeight: '70vh' }}>
 					{
 						loading
 						?

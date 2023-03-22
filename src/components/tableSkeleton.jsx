@@ -20,8 +20,8 @@ const TableSkeleton = () => {
 		<TableHead>
 			<TableRow>
 				{
-					[...Array(8)].map( () =>
-						<TableCell {...tableHeadStyle} >
+					[...Array(8)].map( (_,i) =>
+						<TableCell key={i} {...tableHeadStyle} >
 							<Skeleton variant="rectangular" />	
 						</TableCell>
 					)
@@ -30,8 +30,8 @@ const TableSkeleton = () => {
 		</TableHead>
 		<TableBody>
 			{
-				[...Array(10)].map( () => (
-					<TableRow>
+				[...Array(10)].map( (_,i) => (
+					<TableRow key={i} >
 						{[...Array(8)].map(() => <TableCell {...tableDataStyle} ><Skeleton variant="rectangular" />	</TableCell>)}
 					</TableRow>
 				))

@@ -17,7 +17,7 @@ const tableDataStyle = {
 const BasicTable = ({ headerGroups, getTableProps, getTableBodyProps, rows, prepareRow  }) => {
 
   return (
-    <Table sx={{ width: 'max-content', minWidth: '100%' }}  {...getTableProps()} >
+    <Table stickyHeader sx={{ width: 'max-content', minWidth: '100%' }}  {...getTableProps()} >
       <TableHead >
         {
           headerGroups.map( headerGroup => (

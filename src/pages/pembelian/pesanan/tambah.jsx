@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Divider,
-  IconButton,
   InputBase,
   NativeSelect,
   Stack,
@@ -10,8 +9,9 @@ import {
 } from "@mui/material";
 import BreadCrumbsNav from "../../../components/BreadCrumbs";
 import { useState } from "react";
-import { AddRounded, Delete, KeyboardArrowDownRounded } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
+import { AddRounded, KeyboardArrowDownRounded } from "@mui/icons-material";
+import { useForm, useFieldArray } from "react-hook-form";
+import ProductRow from "../../../components/ProductRow";
 
 const baseInputStyle = {
   bgcolor: "#F5F8FA",
@@ -25,23 +25,6 @@ const FormInputLabel = ({ label }) => {
     <Typography
       variant="body1"
       sx={{ fontSize: "13px", fontWeight: "300", mb: 1 }}
-    >
-      {label}
-    </Typography>
-  );
-};
-
-const ProdukInputLabel = ({ label }) => {
-  return (
-    <Typography
-      variant="body1"
-      sx={{
-        fontSize: "13px",
-        fontWeight: "500",
-        width: "100%",
-        color: "greyFont.main",
-        mb: 1,
-      }}
     >
       {label}
     </Typography>
@@ -79,10 +62,16 @@ const ErrorText = ({ text }) => {
 
 const TambahPesanan = () => {
 
-  const [produkFormRow, setProdukFormRow] = useState({
-    row: 1,
-    data: []
-  });
+  const [produkFormRow, setProdukFormRow] = useState([
+    {
+      product_name: '',
+      unit: '',
+      taxes: '',
+      price: 0,
+      total_price: 0,
+      quantity: 0
+    }
+  ]);
 
   const [total, setTotal] = useState(0)
   const [subTotal, setSubtotal] = useState(0)
@@ -91,49 +80,24 @@ const TambahPesanan = () => {
 
   const [showBiayaKirim, setShowBiayaKirim] = useState(false)
 
-  const { getValues, setValue, register, handleSubmit, formState: { errors } } = useForm()
+  const { getValues, control, register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      products: [
+        {
+          product_name: '',
+          unit: '',
+          taxes: '',
+          price: 0,
+          total_price: 0,
+          quantity: 0
+        }
+      ]
+    }
+  })
+
+  const { fields, append, remove } = useFieldArray({ control, name: 'products' })
 
   const onSubmit = data => console.log(data)
-
-  const handleDeleteProdukRow = (idx) => {
-
-    const newData = produkFormRow.data.filter( (e,i) => i !== idx )
-
-    setProdukFormRow({
-      row: produkFormRow.row - 1,
-      data: newData
-    })
-
-  }
-
-  const handleTotal = (e, idx) => {
-
-    const discount = getValues(`diskon${idx}`) ?? 0
-    const harga = getValues(`harga${idx}`)
-    const kuantitas = getValues(`kuantitas${idx}`)
-
-    setValue(`priceWithOutDiscount${idx}`, harga*kuantitas)
-
-    // eslint-disable-next-line
-    if(discount == 0 ){
-      setValue(`total${idx}`, harga*kuantitas)
-      setValue(`discountPrice${idx}`, 0)
-      setSummaryValue()
-      return
-    }
-
-    var totalPrice = harga * kuantitas
-    const discountPoint  =  totalPrice * (discount/100)
-    totalPrice = totalPrice - discountPoint
-
-    if(discountPoint !== 0 && discountPoint !== undefined){
-      setValue(`discountPrice${idx}`, discountPoint)
-    }
-    
-    setValue(`total${idx}`, totalPrice)
-    setSummaryValue()
-
-  }
 
   const setSummaryValue = () => {
 
@@ -189,20 +153,20 @@ const TambahPesanan = () => {
         </Box>
         <Box sx={{ flex: 1 }}>
           <FormInputLabel label="Nomor Order" />
-          <InputBase sx={{ ...baseInputStyle, width: "100%" }} {...register('noOrder', { required: { value: true, message: 'masukkan nomor order' } })} />
-          {errors.noOrder && <ErrorText text={errors.noOrder.message} />}
+          <InputBase sx={{ ...baseInputStyle, width: "100%" }} {...register('order_number', { required: { value: true, message: 'masukkan nomor order' } })} />
+          {errors.order_number && <ErrorText text={errors.order_number.message} />}
         </Box>
       </Stack>
       <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
         <Box sx={{ flex: 1 }}>
           <FormInputLabel label="Tanggal Pesan" />
-          <InputBase type="date" sx={{ ...baseInputStyle, width: "100%" }} {...register('tglPesan', { required: { value: true, message: 'masukkan tanggal ' } })} />
-          {errors.tglPesan && <ErrorText text={errors.tglPesan.message} />}
+          <InputBase type="date" sx={{ ...baseInputStyle, width: "100%" }} {...register('order_date', { required: { value: true, message: 'masukkan tanggal ' } })} />
+          {errors.order_date && <ErrorText text={errors.order_date.message} />}
         </Box>
         <Box sx={{ flex: 1, mx: 2 }}>
           <FormInputLabel label="Tanggal Jatuh Tempo" />
-          <InputBase sx={{ ...baseInputStyle, width: "100%" }} type="date" {...register('tglTempo', { required: { value: true, message: 'masukkan tanggal ' } })} />
-          {errors.tglTempo && <ErrorText text={errors.tglTempo.message} />}
+          <InputBase sx={{ ...baseInputStyle, width: "100%" }} type="date" {...register('due_date', { required: { value: true, message: 'masukkan tanggal ' } })} />
+          {errors.due_date && <ErrorText text={errors.due_date.message} />}
         </Box>
         <Box sx={{ flex: 1 }}>
           <FormInputLabel label="Pembayaran" />
@@ -210,145 +174,50 @@ const TambahPesanan = () => {
             input={<InputBase/>}
             sx={{ ...baseInputStyle, width: "100%" }}
             IconComponent={() => <KeyboardArrowDownRounded />}
-            {...register('pembayaran', { required: { value: true, message: 'pilih metode pembayaran ' }})}
+            {...register('payment_type', { required: { value: true, message: 'pilih metode pembayaran ' }})}
           >
             <option>Cash On Delivery</option>
             <option>Credit</option>
           </NativeSelect>
-          {errors.pembayaran && <ErrorText text={errors.pembayaran.message} />}
+          {errors.payment_type && <ErrorText text={errors.payment_type.message} />}
         </Box>
       </Stack>
       <Stack direction="row" justifyContent="space-between">
-        <Box sx={{ flex: 1 }}>
-          <FormInputLabel label="Gudang" />
+        <Box sx={{ flex: 1, mx: 2, ml: 0 }}>
+          <FormInputLabel label="Cabang" />
           <NativeSelect
             input={<InputBase/>}
             sx={{ ...baseInputStyle, width: "100%" }}
             IconComponent={() => <KeyboardArrowDownRounded />}
-            {...register('gudang', { required: { value: true, message: 'pilih gudang ' } })}
-          >
-            <option>Gudang Utama</option>
-            <option>Gudang Tidak Utama</option>
-          </NativeSelect>
-          {errors.gudang && <ErrorText text={errors.gudang.message} />}
-        </Box>
-        <Box sx={{ flex: 1, mx: 2 }}>
-          <FormInputLabel label="Tag" />
-          <NativeSelect
-            input={<InputBase/>}
-            sx={{ ...baseInputStyle, width: "100%" }}
-            IconComponent={() => <KeyboardArrowDownRounded />}
-            {...register('tag', { required: { value: true, message: 'pilih cabang' } })}
+            {...register('branch', { required: { value: true, message: 'pilih cabang' } })}
           >
             <option>Cabang 1</option>
             <option>Cabang 2</option>
           </NativeSelect>
-          {errors.tag && <ErrorText text={errors.tag.message} />}
+          {errors.branch && <ErrorText text={errors.branch.message} />}
         </Box>
         <Box sx={{ flex: 1 }}>
           <FormInputLabel label="Apoteker Penanggung Jawab" />
-          <InputBase sx={{ ...baseInputStyle, width: "100%" }} {...register('penanggungJawab', { required: { value: true, message: 'masukkan penanggung jawab' } })}  />
-          {errors.penanggungJawab && <ErrorText text={errors.penanggungJawab.message} />}
+          <InputBase sx={{ ...baseInputStyle, width: "100%" }} {...register('responsible_person', { required: { value: true, message: 'masukkan penanggung jawab' } })}  />
+          {errors.responsible_person && <ErrorText text={errors.responsible_person.message} />}
         </Box>
       </Stack>
       <Typography variant="body1" sx={{ mb: "20px", fontWeight: "500", my: 3 }}>
         Form Vendor
       </Typography>
-      {[...Array(produkFormRow.row)].map((e, i) => (
-        <Stack
-          id={i}
-          justifyContent="space-between"
-          direction="row"
-          sx={{ mb: 2, borderBottom: "1px solid #EAEAEA", pb: 3 }}
-        >
-          <InputBase type="hidden" {...register(`priceWithOutDiscount${i}`)} />
-          <InputBase type="hidden" {...register(`discountPrice${i}`)} />
-          <Box sx={{ flex: 1.5, mr: 1 }}>
-            <ProdukInputLabel label='Produk' />
-            <InputBase 
-              fullWidth 
-              {...register(`produk${i}`)}
-              sx={{ ...baseInputStyle }} 
-            />
-          </Box>
-          <Box sx={{ flex: 1, mx: 1 }}>
-            <ProdukInputLabel label="Kuantitas" />
-            <InputBase 
-              fullWidth 
-              type="number" 
-              sx={{ ...baseInputStyle }}
-              {...register(`kuantitas${i}`, { onChange: (e) => handleTotal(e, i) })}
-            />
-          </Box>
-          <Box sx={{ flex: 1, mx: 1 }}>
-            <ProdukInputLabel label="Satuan" />
-            <NativeSelect
-              input={<InputBase />}
-              sx={{ ...baseInputStyle, width: "100%" }}
-              IconComponent={() => <KeyboardArrowDownRounded />}
-              {...register(`satuan${i}`)}
-            >
-              <option>Pcs</option>
-              <option>Botol</option>
-            </NativeSelect>
-          </Box>
-          <Box sx={{ flex: 1, mx: 1 }}>
-            <ProdukInputLabel label="Diskon" />
-            <InputBase 
-              fullWidth 
-              type="number" 
-              sx={{ ...baseInputStyle }}
-              {...register(`diskon${i}`, { onChange: (e) => handleTotal(e,i) })}
-            />
-          </Box>
-          <Box sx={{ flex: 1, mx: 1 }}>
-            <ProdukInputLabel label="Harga" />
-            <InputBase 
-              fullWidth 
-              sx={{ ...baseInputStyle }} 
-              {...register(`harga${i}`, { onChange: (e) => handleTotal(e,i) })}
-            />
-          </Box>
-          <Box sx={{ flex: 1, mx: 1 }}>
-            <ProdukInputLabel label="Pajak" />
-            <NativeSelect
-              input={<InputBase />}
-              sx={{ ...baseInputStyle, width: "100%" }}
-              IconComponent={() => <KeyboardArrowDownRounded />}
-              {...register(`pajak${i}`)}
-            >
-              <option>PPN</option>
-              <option>PPH</option>
-            </NativeSelect>
-          </Box>
-          <Box sx={{ flex: 1.2, ml: 1 }}>
-            <ProdukInputLabel label="Total" />
-            <InputBase
-              fullWidth
-              sx={{ ...baseInputStyle, textAlign: "right" }}
-              {...register(`total${i}`)}
-            />
-          </Box>
-          {produkFormRow !== 1 && (
-            <IconButton
-              disableRipple
-              onClick={() => handleDeleteProdukRow(i)}
-              sx={{
-                height: "50px",
-                width: "50px",
-                alignSelf: "flex-end",
-              }}
-            >
-              <Delete />
-            </IconButton>
-          )}
-        </Stack>
-      ))}
+      {fields.map( (e,i) => 
+      <ProductRow 
+        key={e.id}
+        register={register}
+        index={i}
+        remove={remove}
+        showDelete={fields.length > 1}
+      />)}
       <Button
         variant="outlined"
         color="secondary"
         sx={{ textTransform: "capitalize" }}
-        onClick={() => setProdukFormRow({ row: produkFormRow.row+1, data: produkFormRow.data })}
+        onClick={() => append()}
       >
         Tambah Baris
       </Button>
@@ -360,6 +229,7 @@ const TambahPesanan = () => {
 
           <FormInputLabel label="pesan" />
           <InputBase multiline fullWidth sx={{ ...baseInputStyle }} rows={3} />
+          {/* // barus ini untuk table */}
         </Box>
         <Box sx={{ flex: 1, pt: "70px" }}>
           <SummaryRow label="Sub Total" number={subTotal} />
