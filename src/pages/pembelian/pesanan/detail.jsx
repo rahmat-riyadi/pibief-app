@@ -21,6 +21,8 @@ import DetailVendorDialog from '../../../components/DetailVendorDialog'
 import { PrintButton } from '../../../components/PrintButton'
 import ReturnSvg from '../../../assets/icons/return.svg'
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import rupiahFormatter from '../../../utils/rupiahFormatter'
 
 const tableHeadStyle = {
 	border: 'none', 
@@ -80,7 +82,7 @@ const FirstRow = (props) => {
             }}
           >
             <span onClick={props.onClick} >
-              PT. Khinta Permai
+              {props.vendor}
             </span>
           </Typography>
         </Typography>
@@ -92,7 +94,7 @@ const FirstRow = (props) => {
         >
           Nomor Order
           <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            P/01
+            {props.orderNumber}
           </Typography>
         </Typography>
       </Grid>
@@ -103,7 +105,7 @@ const FirstRow = (props) => {
         >
           Apoteker PJ
           <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            St. Chadijah S. Farm
+            {props.responsiblePerson}
           </Typography>
         </Typography>
       </Grid>
@@ -111,42 +113,28 @@ const FirstRow = (props) => {
   )
 }
 
-const ThirdRow = () => {
+const ThirdRow = (props) => {
   return (
     <Grid container sx={{ mt: 2 }}>
       <Grid item md={3}>
-        <Typography
+      <Typography
           variant="body1"
           sx={{ fontSize: "12px", fontWeight: "300" }}
         >
-          Gudang
-          <Typography
-            sx={{
-              fontSize: "13px",
-              fontWeight: "600",
-              mt: 1,
-            }}
-          >
-            Gudang Utama
+          Cabang
+          <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
+            {props.branch}
           </Typography>
         </Typography>
       </Grid>
       <Grid item md={4}>
-        <Typography
-          variant="body1"
-          sx={{ fontSize: "12px", fontWeight: "300", mx: 8 }}
-        >
-          Tag
-          <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            Cabang 1
-          </Typography>
-        </Typography>
+       
       </Grid>
     </Grid>
   );
 };
 
-const SecondRow = () => {
+const SecondRow = (props) => {
   return (
     <Grid container sx={{ mt: 2 }} >
       <Grid item md={3}>
@@ -162,7 +150,7 @@ const SecondRow = () => {
               mt: 1,
             }}
           >
-            21-10-2020
+            {props.orderDate}
           </Typography>
         </Typography>
       </Grid>
@@ -173,7 +161,7 @@ const SecondRow = () => {
         >
           Tanggal Jatuh Tempo
           <Typography sx={{ fontSize: "13px", fontWeight: "600", mt: 1 }}>
-            17-11-2022
+          {props.dueDate}
           </Typography>
         </Typography>
       </Grid>
@@ -184,29 +172,11 @@ const SecondRow = () => {
 const DetailPesanan = ({status  = 'Selesai'}) => {
 
   const dispatch = useDispatch()
+  const location = useLocation()
+
+  const data = location.state
 
   const [showVendorModal, setShowVendorModal] = useState(false)
-
-  let tableData = [
-		{
-      produk: 'Termometer',
-      kuantitas: 3,
-      satuan: 'Pcs',
-      diskon: '5%',
-      harga: 'Rp. 120.000',
-      pajak: 'PPN',
-      total: 'Rp. 342.000',
-		},
-		{
-			produk: 'Masker',
-      kuantitas: 10,
-      satuan: 'Box',
-      diskon: '0%',
-      harga: 'Rp. 30.000',
-      pajak: 'PPN',
-      total: 'Rp. 300.000',
-		}
-	]
 
   const handleClick = () => {
 
@@ -230,39 +200,46 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
             sx={{
               width: 'fit-content', 
               p: '6px 8px', 
-              bgcolor: status === 'Selesai' ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
-              color: status === 'Selesai' ? '#50CD89' : '#F9A11B',
+              bgcolor: data.status ? 'rgba(80, 205, 137, 0.2)' : 'rgba(249, 161, 27, 0.2)',
+              color: data.status ? '#50CD89' : '#F9A11B',
               borderRadius: '3px',
               my: 2.5,
               ml: 2.5
             }} 
         >
             <Typography variant='body1' sx={{ fontSize: '12px' }} >
-              {status}
+              {data.status ? 'Verifikasi' : 'Menunggu'}
             </Typography>
           </Box>
           <Box flex={1} />
-          <Button 
-            variant='contained' 
-            disableElevation
-            startIcon={ <img src={ReturnSvg} alt="icn" /> } 
-            sx={{ 
-              textTransform: 'capitalize', 
-              color: '#FFF', 
-              my: 2.5, 
-              mr: 2.5 ,
-              bgcolor: '#F9A11B',
-              px: 3
-            }} 
-            >
-            Return
-        </Button>
-          <PrintButton disable={true} />
+          {
+
+            data.status
+            ?
+            <Button 
+              variant='contained' 
+              disableElevation
+              startIcon={ <img src={ReturnSvg} alt="icn" /> } 
+              sx={{ 
+                textTransform: 'capitalize', 
+                color: '#FFF', 
+                my: 2.5, 
+                mr: 2.5 ,
+                bgcolor: '#F9A11B',
+                px: 3
+              }} 
+              >
+              Return
+          </Button>
+          :
+          null
+          }
+          <PrintButton disable={data.status ? false : true} />
         </Stack> 
         <Box sx={{ p: 2.5 }} >
-          <FirstRow onClick={() => setShowVendorModal(true)} />
-          <SecondRow/>
-          <ThirdRow/>
+          <FirstRow responsiblePerson={data.responsible_person} orderNumber={data.order_number} vendor={data.vendor} onClick={() => setShowVendorModal(true)} />
+          <SecondRow orderDate={data.order_date} dueDate={data.due_date} />
+          <ThirdRow branch={data.branch} />
           <TableContainer sx={{ mt: 3 }} >
             <Table>
               <TableHead>
@@ -291,28 +268,28 @@ const DetailPesanan = ({status  = 'Selesai'}) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tableData.map((e,i) => (
+                {data?.purchase_product.map((e,i) => (
                   <TableRow>
                     <TableCell sx={{ ...tableDataStyle }} >
-                      {e.produk}
+                      {e.product_name}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle, width: '50px' }} >
-                      {e.kuantitas}
+                      {e.quantity}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle }} >
-                      {e.satuan}
+                      {e.unit}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle, width: '50px' }} >
-                      {e.diskon}
+                      {e?.discount}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle }} >
-                      {e.harga}
+                    {rupiahFormatter(e.price)}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle }} >
-                      {e.pajak}
+                      {e.taxes}
                     </TableCell>
                     <TableCell sx={{ ...tableDataStyle }} >
-                      {e.total}
+                      {rupiahFormatter(e.total_price)}
                     </TableCell>
                   </TableRow>
                 ))}

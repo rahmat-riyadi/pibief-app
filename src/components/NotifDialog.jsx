@@ -1,4 +1,4 @@
-import { Dialog, Stack, Typography, Button } from "@mui/material";
+import { Dialog, Stack, Typography, Button, CircularProgress } from "@mui/material";
 import warning from "../assets/image/warning.svg";
 import success from "../assets/image/done.svg";
 import danger from "../assets/icons/danger.svg";
@@ -60,6 +60,7 @@ const NotifDialog = (props) => {
               color="secondary"
               sx={{ textTransform: "none", width: "132px", color: "#fff" }}
               onClick={props.onAccept}
+              startIcon={ props.loading && <CircularProgress color="white" size={16} /> }
             >
               {props.onAcceptText}
             </Button>

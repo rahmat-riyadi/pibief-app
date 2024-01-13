@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   InputBase,
   NativeSelect,
@@ -12,6 +13,10 @@ import { useState } from "react";
 import { AddRounded, KeyboardArrowDownRounded } from "@mui/icons-material";
 import { useForm, useFieldArray } from "react-hook-form";
 import ProductRow from "../../../components/ProductRow";
+import { storePurchase } from "../../../services/purchase";
+import { useNavigate } from "react-router-dom";
+import AlertNotif from "../../../components/Alert";
+import rupiahFormatter from "../../../utils/rupiahFormatter";
 
 const baseInputStyle = {
   bgcolor: "#F5F8FA",
@@ -62,34 +67,27 @@ const ErrorText = ({ text }) => {
 
 const TambahPesanan = () => {
 
-  const [produkFormRow, setProdukFormRow] = useState([
-    {
-      product_name: '',
-      unit: '',
-      taxes: '',
-      price: 0,
-      total_price: 0,
-      quantity: 0
-    }
-  ]);
+  const navigate = useNavigate()
 
-  const [total, setTotal] = useState(0)
-  const [subTotal, setSubtotal] = useState(0)
-  const [discountTotal, setDiscountTotal] = useState(0)
-  const [additionalDiscount, setAdditionalDiscount] = useState(0)
+  const [loading, setLoading] = useState(false)
 
+  const [alertOpt, setAlertOpt] = useState({
+    visible: false,
+    message: '',
+    type: 'error'
+  })
   const [showBiayaKirim, setShowBiayaKirim] = useState(false)
 
-  const { getValues, control, register, handleSubmit, formState: { errors } } = useForm({
+  const { getValues, watch, setValue, control, register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       products: [
         {
           product_name: '',
           unit: '',
           taxes: '',
-          price: 0,
-          total_price: 0,
-          quantity: 0
+          price: '',
+          total_price: '',
+          quantity: ''
         }
       ]
     }
@@ -97,38 +95,67 @@ const TambahPesanan = () => {
 
   const { fields, append, remove } = useFieldArray({ control, name: 'products' })
 
-  const onSubmit = data => console.log(data)
+  const totalPrice = watch('total_price')
+  const subTotal = watch('sub_total')
+
+  const onSubmit = async data => {
+
+    setLoading(true)
+
+    console.log(data)
+
+    await storePurchase(data)
+    .then( res => {
+
+      setAlertOpt({
+        visible: true,
+        message: res.message,
+        type: 'success'
+      })
+
+      setTimeout(() => {
+        return navigate(-1)
+      }, 3000)
+
+    })
+    .catch( err => {
+
+      setAlertOpt({
+        visible: true,
+        message: err.message,
+        type: 'success'
+      })
+
+    })
+    .finally(() => setLoading(false))
+
+  }
 
   const setSummaryValue = () => {
+    const productPrice = fields.map((_,i) => getValues(`products.${i}.total_price`))
+    const subTotal = productPrice.reduce( (prev, curr) => prev + curr, 0)
+    setValue('sub_total', subTotal)
+    const shippingCost = Number(getValues('shippingCost')) ?? 0
+    const totalPrice = subTotal + shippingCost
+    setValue('total_price', totalPrice)
+  }
 
-    var totalList = []
-    var discountList = []
-    var priceAmountList = []
-
-    for(let i = 0; i < produkFormRow.row; i++){
-      const discount = getValues(`discountPrice${i}`) ?? 0
-      const price = getValues(`priceWithOutDiscount${i}`) 
-      const priceAmount = getValues(`total${i}`) 
-      totalList.push(price)
-      discountList.push(discount)
-      priceAmountList.push(priceAmount)
-    }
-
-    const total = totalList.reduce((v, c) => v + c)
-    const discount = discountList.reduce((v, c) => v + c)
-    const totalAmount = priceAmountList.reduce((v,c) => v + c)
-
-    setSubtotal(total)
-    setDiscountTotal(discount)
-
-    const biayaKirim = getValues('biayaKirim') ?? 0
-
-    console.log('biaya krim : ', biayaKirim)
-    console.log('total harga : ', totalAmount)
-    const result = Number(biayaKirim) + Number(totalAmount)
-    console.log('resutl  : ', result)
-    setTotal(result)
-
+  const handleTotal = (e) => {
+    const idx = e.target.name.split('.')[1]
+    let [ quantity, price, discount, totalPrice ] = getValues([
+      `products.${idx}.quantity`,
+      `products.${idx}.price`,
+      `products.${idx}.discount`,
+      `products.${idx}.total_price`,
+    ])
+    totalPrice = 
+      discount !== 0 && discount !== null && discount !== ''
+      ? 
+      quantity * price - (quantity * price * (discount / 100)) 
+      : 
+      quantity * price
+    setValue(`products.${idx}.total_price`, totalPrice)
+    setSummaryValue()
   }
 
   return (
@@ -212,6 +239,8 @@ const TambahPesanan = () => {
         index={i}
         remove={remove}
         showDelete={fields.length > 1}
+        handleTotal={handleTotal}
+        errors={errors}
       />)}
       <Button
         variant="outlined"
@@ -226,39 +255,22 @@ const TambahPesanan = () => {
           <Typography variant="body1" sx={{ fontWeight: "500", mb: 2 }}>
             Catatan
           </Typography>
-
           <FormInputLabel label="pesan" />
           <InputBase multiline fullWidth sx={{ ...baseInputStyle }} rows={3} />
           {/* // barus ini untuk table */}
         </Box>
         <Box sx={{ flex: 1, pt: "70px" }}>
-          <SummaryRow label="Sub Total" number={subTotal} />
+          <InputBase {...register('sub_total')} type='hidden' />
+          <SummaryRow label="Sub Total" number={ subTotal ? rupiahFormatter(subTotal) : 0} />
           <Divider sx={{ bgcolor: "#EAEAEA", my: "13px" }} />
-          {
+          {/* {
             (discountTotal !== 0)
             &&
             <>
               <SummaryRow label="Diskon Per Item" number={discountTotal} />
               <Divider sx={{ bgcolor: "#EAEAEA", my: "13px" }} />
             </>  
-          }
-          <Stack alignItems="flex-end">
-            <Button
-              variant="text"
-              color="secondary"
-              sx={{
-                textTransform: "capitalize",
-                mr: 0,
-                width: "fit-content",
-                fontSize: "14px",
-              }}
-              startIcon={<AddRounded />}
-              onClick={ () => setAdditionalDiscount(additionalDiscount+1) }
-            >
-              Tambah Diskon
-            </Button>
-          </Stack>
-          <Divider sx={{ bgcolor: "#EAEAEA", my: "13px" }} />
+          } */}
           {
             !showBiayaKirim
             &&
@@ -294,7 +306,7 @@ const TambahPesanan = () => {
                 <InputBase 
                   type='number'
                   sx={{ ...baseInputStyle }} 
-                  {...register('biayaKirim', { onChange: () => setSummaryValue() })}
+                  {...register('shippingCost', { onChange: () => setSummaryValue() })}
                 />
               </Box>
             </Stack>
@@ -313,7 +325,8 @@ const TambahPesanan = () => {
               sx={{ fontSize: "16px", fontWeight: "600", flex: 1 }}
               variant="body1"
             >
-              {total}
+              <InputBase type="hidden" {...register('total_price')} />
+              {totalPrice ? rupiahFormatter(totalPrice) : 0}
             </Typography>
           </Stack>
           <Divider sx={{ bgcolor: "#EAEAEA", my: "13px" }} />
@@ -324,11 +337,20 @@ const TambahPesanan = () => {
             color="secondary"
             disableElevation
             onClick={handleSubmit(onSubmit)}
+            startIcon={ loading && <CircularProgress size={18} color='white'  />}
+            disabled={loading}
           >
             Simpan & Setujui
           </Button>
         </Box>
       </Stack>
+
+      <AlertNotif
+        visible={alertOpt.visible}
+        message={alertOpt.message}
+        type={alertOpt.type}
+        onClose={() => setAlertOpt({...alertOpt, visible: false})}
+      />
     </Box>
   );
 };

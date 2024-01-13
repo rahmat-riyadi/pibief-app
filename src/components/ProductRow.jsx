@@ -1,38 +1,42 @@
 import { Delete, KeyboardArrowDownRounded } from "@mui/icons-material";
 import {
-    Box,
-    IconButton,
-    InputBase,
-    NativeSelect,
-    Stack,
-    Typography,
-  } from "@mui/material";
+  Box,
+  IconButton,
+  InputBase,
+  NativeSelect,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-  const baseInputStyle = {
-    bgcolor: "#F5F8FA",
-    py: "5px",
-    px: "10px",
-    fontSize: "14px",
-  };
+const baseInputStyle = {
+  bgcolor: "#F5F8FA",
+  py: "5px",
+  px: "10px",
+  fontSize: "14px",
+};
 
-  const ProdukInputLabel = ({ label }) => {
-    return (
-      <Typography
-        variant="body1"
-        sx={{
-          fontSize: "13px",
-          fontWeight: "500",
-          width: "100%",
-          color: "greyFont.main",
-          mb: 1,
-        }}
-      >
-        {label}
-      </Typography>
-    );
-  };
+const ProdukInputLabel = ({ label }) => {
+  return (
+    <Typography
+      variant="body1"
+      sx={{
+        fontSize: "13px",
+        fontWeight: "500",
+        width: "100%",
+        color: "greyFont.main",
+        mb: 1,
+      }}
+    >
+      {label}
+    </Typography>
+  );
+};
 
-const ProductRow = ({ register, showDelete, remove, index }) => {
+const ErrorText = ({ text }) => {
+  return <Typography variant='body1' sx={{ color: 'red', fontSize: '12px', mt: '5px' }} >{text}</Typography>
+}
+
+const ProductRow = ({ register, showDelete, remove, handleTotal, index, errors }) => {
   return (
     <Stack
           justifyContent="space-between"
@@ -46,8 +50,12 @@ const ProductRow = ({ register, showDelete, remove, index }) => {
             <InputBase 
               fullWidth
               sx={{ ...baseInputStyle }}
-              {...register(`products.${index}.product_name`, { required: true })}
+              {...register(`products.${index}.product_name`, { required: {
+                value: true,
+                message: 'Masukkan Nama'
+              }})}
             />
+            {errors.vendor && <ErrorText text={errors.products[index].product_name.message} />}
           </Box>
           <Box sx={{ flex: 1, mx: 1 }}>
             <ProdukInputLabel label="Kuantitas" />
@@ -56,8 +64,15 @@ const ProductRow = ({ register, showDelete, remove, index }) => {
               type="number"
               placeholder="0"
               sx={{ ...baseInputStyle }}
-              {...register(`products.${index}.quantity`, { required: true })}
+              {...register(`products.${index}.quantity`, {
+                required: {
+                  value: true,
+                  message: 'Masukan Jumlah Produk'
+                }, 
+                onChange: e => handleTotal(e) 
+              })}
             />
+            {errors.vendor && <ErrorText text={errors.products[index].quantity.message} />}
           </Box>
           <Box sx={{ flex: 1, mx: 1 }}>
             <ProdukInputLabel label="Satuan" />
@@ -65,11 +80,12 @@ const ProductRow = ({ register, showDelete, remove, index }) => {
               input={<InputBase />}
               sx={{ ...baseInputStyle, width: "100%" }}
               IconComponent={() => <KeyboardArrowDownRounded />}
-              {...register(`products.${index}.unit`, { required: true })}
+              {...register(`products.${index}.unit`, { required: { value: true, message: 'Masukan Unit' } })}
             >
               <option>Pcs</option>
               <option>Botol</option>
             </NativeSelect>
+            {errors.vendor && <ErrorText text={errors.products[index].unit.message} />}
           </Box>
           <Box sx={{ flex: 1, mx: 1 }}>
             <ProdukInputLabel label="Diskon" />
@@ -77,16 +93,24 @@ const ProductRow = ({ register, showDelete, remove, index }) => {
               fullWidth 
               type="number" 
               sx={{ ...baseInputStyle }}
-              {...register(`products.${index}.discount`, { required: true })}
+              {...register(`products.${index}.discount`, { onChange: e => handleTotal(e) })}
             />
           </Box>
           <Box sx={{ flex: 1, mx: 1 }}>
             <ProdukInputLabel label="Harga" />
             <InputBase 
-              fullWidth 
+              fullWidth
+              type="number" 
               sx={{ ...baseInputStyle }}
-              {...register(`products.${index}.price`, { required: true })}
+              {...register(`products.${index}.price`, { 
+                required: {
+                  value: true,
+                  message: 'Masukan Harga'
+                }, 
+                onChange: e => handleTotal(e),
+              })}
             />
+            {errors.vendor && <ErrorText text={errors.products[index].price.message} />}
           </Box>
           <Box sx={{ flex: 1, mx: 1 }}>
             <ProdukInputLabel label="Pajak" />
@@ -94,18 +118,26 @@ const ProductRow = ({ register, showDelete, remove, index }) => {
               input={<InputBase />}
               sx={{ ...baseInputStyle, width: "100%" }}
               IconComponent={() => <KeyboardArrowDownRounded />}
-              {...register(`products.${index}.taxes`, { required: true })}
+              {...register(`products.${index}.taxes`, { 
+                required: {
+                  value: true,
+                  message: 'Masukan Pajak'
+                }, 
+                onChange: e => handleTotal(e)
+              })}
             >
               <option>PPN</option>
               <option>PPH</option>
             </NativeSelect>
+            {errors.vendor && <ErrorText text={errors.products[index].taxes.message} />}
           </Box>
           <Box sx={{ flex: 1.2, ml: 1 }}>
             <ProdukInputLabel label="Total" />
             <InputBase
               fullWidth
               sx={{ ...baseInputStyle, textAlign: "right" }}
-              {...register(`products.${index}.total_price`, { required: true, onChange: e => console.log(e.target.value) })}
+              readOnly
+              {...register(`products.${index}.total_price`, { required: true, onChange: e => handleTotal(e) })}
             />
           </Box>
           {

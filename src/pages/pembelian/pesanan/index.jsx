@@ -11,7 +11,7 @@ import NotifDialog from '../../../components/NotifDialog'
 import { FilterBox } from '../../../components/FilterBox'
 import { AddButton } from '../../../components/AddButton'
 import { useState } from 'react'
-import { getAllPurchase } from '../../../services/purchase'
+import { deletePurchase, getAllPurchase } from '../../../services/purchase'
 import { TableButton } from '../../../components/TableButton'
 import { useMemo } from 'react'
 import dateFormatter from '../../../utils/dateFormatter'
@@ -19,15 +19,26 @@ import TextChip from '../../../components/textChip'
 import TableSkeleton from '../../../components/tableSkeleton'
 import BasicTable from '../../../components/Table'
 import { useSortBy, useTable, useGlobalFilter } from 'react-table'
+import rupiahFormatter from '../../../utils/rupiahFormatter'
+import AlertNotif from '../../../components/Alert'
 
 const Pesanan = () => {
 
 	const navigate = useNavigate()
 
-	const [showModal, setShowModal] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [showModal, setShowModal] = useState(false)
+	const [buttonLoading, setButtonLoading] = useState(false)
 
 	const [purchaseData, setPurchaseData] = useState([])
+
+	const [selectedData, setSelectedData] = useState('')
+
+	const [alertOpt, setAlertOpt] = useState({
+		visible: false,
+		message: '',
+		type: '',
+	})
 
 	const columns = useMemo(() => [
 		{
@@ -57,19 +68,23 @@ const Pesanan = () => {
 		{
 			Header: 'Total',
 			accessor: 'total_price',
+			Cell: ({ value }) => rupiahFormatter(value)
 		},
 		{
 			Header: 'Aksi',
-			Cell: () => 
+			Cell: ({ row }) => 
 			(<Stack direction='row' justifyContent='space-between' columnGap={1} >
 				<TableButton
 					title='Lihat'
-					onClick={() => navigate('detail/1')}
+					onClick={() => navigate('detail/' + row.original.order_number, { state: row.original })}
 				/>
 				<TableButton
 					title='Hapus'
 					type='delete'
-					onClick={() => setShowModal(true)}
+					onClick={() => {
+						setShowModal(true)
+						setSelectedData(row.original.id)
+					}}
 				/>
 			</Stack>)
 		}
@@ -97,6 +112,31 @@ const Pesanan = () => {
 		const purchaseResponse = await getAllPurchase()
 		setPurchaseData(purchaseResponse.data)
 		setLoading(false)
+	}
+
+	const deleteData = async () => {
+
+		setButtonLoading(true)
+
+		await deletePurchase(selectedData)
+		.then( res => {
+
+			setButtonLoading(false)
+			setShowModal(false)
+
+			setAlertOpt({
+				visible: true,
+				message: res.message,
+				type: res.status
+			})
+
+			const data = purchaseData.filter( e => e.id !== selectedData )
+
+			setPurchaseData(data)
+
+		})
+
+
 	}
 
   return (
@@ -129,13 +169,22 @@ const Pesanan = () => {
 				</TableContainer>
 			<NotifDialog
 				show={showModal}
+				loading={buttonLoading}
 				message="Apakah anda ingin menghapus data?"
 				status='warning'
 				onAcceptText="Ya, hapus"
 				onCancelText='Batal'
-				onAccept={() => setShowModal(false)} 
+				onAccept={deleteData} 
 				onCancel={() => setShowModal(false)} 
 			/>
+
+			<AlertNotif
+				visible={alertOpt.visible}
+				message={alertOpt.message}
+				type={alertOpt.type}
+				onClose={ () => setAlertOpt({ ...alertOpt, visible: false }) }
+			/>
+
     </Box>
   )
 }
